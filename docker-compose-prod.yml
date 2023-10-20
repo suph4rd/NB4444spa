@@ -1,0 +1,20 @@
+version: "3.3"
+
+
+services:
+  nb4_api_prod:
+    build: ./NB4444
+    image: 'nb4444-prod-api'
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:9999"
+    volumes:
+      - ./NB4444/db:/NB4444/db
+      - ./NB4444/media/foto:/NB4444/media/foto
+    ports:
+      - "9999:9999"
+
+  nb4_vue_prod:
+    build: ./nb4444-vue
+    image: 'nb4444-prod-vue'
+    command: sh -c "npm run serve -- --port 90"
+    ports:
+      - "90:90"

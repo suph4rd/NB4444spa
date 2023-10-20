@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  app-prod:
+    build: .
+    image: 'nb4444-prod-api'
+    volumes:
+      - ./db:/NB4444/db
+      - ./media/foto:/NB4444/media/foto
+    ports:
+      - "9009:8000"
+
+#  nginx:
+#    build: ./nginx
+#    volumes:
+#      - static_volume:/NB4444/static
+#      - ./media:/NB4444/media
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - app
+#    restart: always
+
+#volumes:
+#  static_volume:

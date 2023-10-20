@@ -1,0 +1,11 @@
+version: "3.3"
+
+services:
+  app_develop:
+    build: .
+    image: 'nb4444-dev-api'
+    volumes:
+      - ./db:/NB4444/db
+      - ./media/foto:/NB4444/media/foto
+    ports:
+      - "8008:8000"
