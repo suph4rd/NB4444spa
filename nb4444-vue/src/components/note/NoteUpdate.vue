@@ -1,0 +1,144 @@
+<template>
+  <div class="main-content">
+    <v-card :style="{'width': '100%'}">
+    <v-form
+      ref="form"
+      lazy-validation
+      :style="{'margin': '15px'}"
+      @submit.prevent="updateNotes"
+      v-if="object"
+    >
+    <v-textarea
+      outlined
+      v-model="object.text"
+      rows="4"
+      label="Сообщение"
+      required
+    ></v-textarea>
+
+    <v-img v-if="object.image" :src="object.image"></v-img>
+
+    <v-file-input
+      label="Файл"
+      outlined
+      dense
+      v-model="newImage"
+      class="mt-5"
+    ></v-file-input>
+
+    <div style="display: flex">
+
+        <v-btn
+          color="success"
+          class="mr-4"
+          type="submit"
+        >Отправить</v-btn>
+
+        <v-btn
+          class="mr-4"
+          @click="resetForm"
+          color="secondary"
+        >Сброс</v-btn>
+
+        <Delete
+          @onDelete="redirectLogic"
+          :objId="object.id"
+          :deletePath="'/api/v1/note/'"
+          :titleDelete="'заметки'"
+          :messageDelete="'заметку'"
+          :is-simple="true"
+        >
+        </Delete>
+
+          <v-btn
+            class="ml-5"
+            :to="{ name: 'Note'}"
+          >
+            Назад
+          </v-btn>
+
+      </div>
+
+  </v-form>
+  </v-card>
+  </div>
+</template>
+
+<script>
+  import header from "../../mixins/header";
+  import Delete from "@/components/common_components/Delete.vue";
+
+  export default {
+    name: 'NoteUpdate',
+    components: {Delete},
+    mixins: [header],
+
+    data: function () {
+      return {
+        newImage: null,
+        defaultObject: null,
+        object: {
+          text: "",
+          image: null,
+        },
+      }
+    },
+    methods: {
+
+      updateNotes() {
+          if (!this.text && !this.object.image) {
+            alert("Форма пуста!");
+            return;
+          }
+          let data;
+          let headers = this.getHeaders();
+          if (this.newImage) {
+            let formData = new FormData()
+            formData.append("text", this.object.text);
+            formData.append("image",  this.newImage[0], this.newImage[0].name);
+            data = formData;
+            headers['Content-Type'] = 'multipart/form-data';
+          } else {
+            data = {
+              "text": this.object.text,
+            }
+          }
+          this.axios.patch(`${this.$apiHost}/api/v1/note/${this.$route.params.noteId}/`, data, {
+            headers: headers
+          }).then((result) =>{
+            this.redirectLogic();
+        }).catch((res) => {
+            this.dropSession(res);
+        })
+      },
+
+      getObject() {
+        let headers = this.getHeaders();
+        this.axios.get(`${this.$apiHost}/api/v1/note/${this.$route.params.noteId}/`, {
+          headers: headers
+        }).then((result) =>{
+          console.log(result.data);
+          this.defaultObject = result.data;
+          this.object = Object.assign({}, this.defaultObject);
+        }).catch((res) => {
+            this.dropSession(res);
+        });
+      },
+
+      redirectLogic () {
+        this.$router.push({ name: 'Note'});
+      },
+
+      resetForm() {
+        this.object = Object.assign({}, this.defaultObject);
+        this.newImage = null;
+      },
+
+
+    },
+
+    mounted() {
+      this.getObject();
+    },
+  }
+</script>

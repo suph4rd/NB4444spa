@@ -1,0 +1,37 @@
+version: "3.3"
+
+#services:
+#  nb4_api_develop:
+#    build: ./NB4444
+#    image: 'nb4444-dev-api'
+#    volumes:
+#      - ./NB4444/db:/NB4444/db
+#      - ./NB4444/media/foto:/NB4444/media/foto
+#    ports:
+#      - "8008:8000"
+#
+#  nb4_vue_develop:
+#    build: ./nb4444-vue
+#    image: 'nb4444-dev-vue'
+#    ports:
+#      - "8008:8000"
+
+
+services:
+  nb4_api_prod:
+    build: ./NB4444
+    image: 'nb4444-prod-api'
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8008"
+#    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn NB4444.wsgi:application --bind 0.0.0.0:8008"
+    volumes:
+      - ./NB4444/db:/NB4444/db
+      - ./NB4444/media/foto:/NB4444/media/foto
+    ports:
+      - "8008:8008"
+
+  nb4_vue_prod:
+    build: ./nb4444-vue
+    image: 'nb4444-prod-vue'
+    command: sh -c "npm run serve"
+    ports:
+      - "8080:8080"

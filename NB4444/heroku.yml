@@ -1,0 +1,7 @@
+build:
+  docker:
+    web: Dockerfile
+
+run:
+  web: python manage.py migrate && gunicorn NB4444.wsgi
+#  web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn NB4444.wsgi
