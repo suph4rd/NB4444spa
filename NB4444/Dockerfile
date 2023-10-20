@@ -28,9 +28,10 @@ ENV LC_ALL ru_RU.UTF-8
 # RUN cd ./vueapp && npm install && npm run build
 
 RUN mkdir common_static
+RUN mkdir db
 
-EXPOSE 8000
+EXPOSE 9999
 CMD python manage.py makemigrations ; \
 python manage.py migrate ; \
 python manage.py collectstatic --noinput; \
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver 0.0.0.0:9999
