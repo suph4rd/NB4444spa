@@ -16,8 +16,7 @@ app.use(store)
 app.use(vuetify)
 app.use(VueAxios, axios)
 
-app.config.globalProperties.$apiHost = 'http://0.0.0.0:8008' // for dev
-// app.config.globalProperties.$apiHost = 'http://0.0.0.0:9009' // for prod
-// app.config.globalProperties.$apiHost = 'http://nb4_api_prod:8008' // for prod
+// app.config.globalProperties.$apiHost = 'http://0.0.0.0:8008' // for dev
+app.config.globalProperties.$apiHost = 'http://0.0.0.0:9999' // for prod
 
 app.mount('#app')
