@@ -26,7 +26,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get("SECRET_KEY", "test")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,23 +88,23 @@ WSGI_APPLICATION = 'NB4444.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DB_NAME", "test"),
-        'USER': os.environ.get("DB_USER", "test"),
-        'PASSWORD': os.environ.get("DB_PASSWORD", "test"),
-        'HOST': os.environ.get("DB_HOST", "test"),
-        'PORT': os.environ.get("DB_PORT", "test"),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db/test_db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get("DB_NAME", "test"),
+#         'USER': os.environ.get("DB_USER", "test"),
+#         'PASSWORD': os.environ.get("DB_PASSWORD", "test"),
+#         'HOST': os.environ.get("DB_HOST", "test"),
+#         'PORT': os.environ.get("DB_PORT", "test"),
+#     }
+# }
 
 
 # Password validation
