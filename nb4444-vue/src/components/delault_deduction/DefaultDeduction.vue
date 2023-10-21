@@ -6,7 +6,7 @@
       ref="form"
       :style="{'width': '95%'}"
       v-if="objects"
-      @submit="sendDefaultDeductions"
+      @submit.prevent="sendDefaultDeductions"
     >
     <v-text-field
       type="number"
@@ -80,14 +80,14 @@
     },
     methods: {
       sendDefaultDeductions(e) {
-            e.preventDefault();
             let headers = this.getHeaders();
+            let user = JSON.parse(sessionStorage.getItem('user'));
             let data = {
               "house": this.objects.house,
               "travel": this.objects.travel,
               "phone": this.objects.phone,
               "food": this.objects.food,
-              "user": this.objects.user
+              "user": user.id,
             }
             this.axios.post(`${this.$apiHost}/api/v1/default-deduction/`, data, {
               headers: headers
@@ -97,6 +97,11 @@
           this.dropSession(res);
         })
       },
+
+     handleError(res) {
+        return res.response.status === 404;
+     }
+
     }
   }
 </script>
