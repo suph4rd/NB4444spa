@@ -16,6 +16,12 @@
       required
     ></v-textarea>
 
+    <v-checkbox
+      v-model="dropFile"
+      label="Удалить файл"
+      color="success"
+    ></v-checkbox>
+
     <v-img v-if="object.image" :src="object.image"></v-img>
 
     <v-file-input
@@ -77,6 +83,7 @@
       return {
         newImage: null,
         defaultObject: null,
+        dropFile: false,
         object: {
           text: "",
           image: null,
@@ -86,7 +93,7 @@
     methods: {
 
       updateNotes() {
-          if (!this.text && !this.object.image) {
+          if (!this.object.text && !this.object.image) {
             alert("Форма пуста!");
             return;
           }
@@ -101,6 +108,9 @@
           } else {
             data = {
               "text": this.object.text,
+            }
+            if (this.dropFile) {
+              data['image'] = null;
             }
           }
           this.axios.patch(`${this.$apiHost}/api/v1/note/${this.$route.params.noteId}/`, data, {
