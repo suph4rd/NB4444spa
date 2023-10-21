@@ -86,7 +86,7 @@
           headers: headers
         }).then((result) => {
           let userInfo = result.data;
-          let userTokens = JSON.parse(sessionStorage.getItem('user', JSON.stringify(userInfo)));
+          let userTokens = JSON.parse(sessionStorage.getItem('user'));
           userInfo = Object.assign(userInfo, userTokens);
           sessionStorage.setItem('user', JSON.stringify(userInfo));
           this.$router.push('/');
