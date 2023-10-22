@@ -106,7 +106,7 @@ class Plan(TimeModel, AbstractSafeModel):
 
 class Section(TimeModel):
     name = models.CharField('Название раздела', max_length=255)
-    is_active = models.BooleanField('Активный')
+    is_active = models.BooleanField('Активный', default=True)
 
     class Meta:
         verbose_name = 'Раздел'
