@@ -15,10 +15,9 @@ If you want to run project in production, you should to do next steps:
 and change port for app.config.globalProperties.$apiHost <br> 
 in ./nb4444-vue/src/mail.js   )
 5. Run file update.sh in console, witch situated in the root of the project
-6. Create superuser:
-    - enter into nb4_api_prod container
-    - write inside container:
-      - python manage.py shell -c "from B4.models import User; User.objects.create_superuser('admin', 'admin@example.com', '55555')"
+6. Default superuser credentials:
+    - username: admin
+    - password: 55555
 
 In the end, project will available on the 90 port (If you haven't changed the default port)
 
