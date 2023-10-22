@@ -5,6 +5,8 @@ from django.db import migrations, transaction
 
 def create_default_value(apps, schema_editor):
     section_class = apps.get_model("B4", "section")
+    if section_class.objects.filter(name='Основной').exists():
+        return
     with transaction.atomic():
         section = section_class(name='Основной', is_active=True)
         section.save()
