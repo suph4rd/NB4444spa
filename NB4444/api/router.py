@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from api import views
+from . import views
 
 router = routers.SimpleRouter()
 router.register('v1/default-deduction', views.DefaultDeductionListFilterModelViewSet)
