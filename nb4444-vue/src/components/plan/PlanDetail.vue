@@ -32,6 +32,23 @@
           ></v-checkbox>
         </template>
 
+        <template v-slot:item.description="{ item }">
+          <div v-html="item.description" />
+        </template>
+
+        <template v-slot:item.priority="{ item }">
+          <v-select
+            label="Select"
+            :items="priorityList"
+            v-model="item.priority"
+            item-title="key"
+            item-value="val"
+            disabled
+          ></v-select>
+        </template>
+
+
+
         <template v-slot:item.actions="{ item }">
           <div class="actions-btn">
             <v-btn icon :to="{ name: 'TaskUpdate', params: {taskId: item.id, planId: this.$route.params.planId} }" >
@@ -76,12 +93,24 @@ export default {
       plan: null,
       apiPath: `/api/v1/plan/${this.$route.params.planId}`,
       objects: null,
+      priorityList: [
+          {key: "Low", val: 0},
+          {key: "Medium", val: 1},
+          {key: "High", val: 2},
+          {key: "Hot", val: 3},
+      ],
       headers: [
         {
           title: 'Готово',
           align: 'start',
           sortable: false,
           value: 'is_ready',
+        },
+        {
+          title: 'Приоритет',
+          align: 'start',
+          sortable: false,
+          value: 'priority',
         },
         {
           title: 'Дата',

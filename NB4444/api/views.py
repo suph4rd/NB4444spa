@@ -6,9 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from api import serializers
-from api.mixins import CRWithUserMixin, ListFilterMixin
-from api.permissions import IsSuperUserOrOwnerPermission
+from . import serializers
+from .mixins import CRWithUserMixin, ListFilterMixin
+from .permissions import IsSuperUserOrOwnerPermission
 from B4 import models as b4_models
 
 

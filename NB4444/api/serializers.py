@@ -70,7 +70,7 @@ class ListTaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = b4_models.Task
-        fields = ['id', 'plan', 'section', 'description', 'is_ready', 'created_at']
+        fields = ['id', 'plan', 'section', 'description', 'is_ready', 'priority', 'created_at']
 
 
 class DetailPlanSerializer(serializers.ModelSerializer):

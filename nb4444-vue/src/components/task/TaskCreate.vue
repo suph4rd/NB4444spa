@@ -16,6 +16,14 @@
               disabled
             ></v-text-field>
 
+            <v-select
+              label="Select"
+              :items="priorityList"
+              v-model="object.priority"
+              item-title="key"
+              item-value="val"
+            ></v-select>
+
             <v-textarea
               outlined
               v-model="object.description"
@@ -79,10 +87,17 @@
       return {
         sections: [],
         object: null,
+        priorityList: [
+          {key: "Low", val: 0},
+          {key: "Medium", val: 1},
+          {key: "High", val: 2},
+          {key: "Hot", val: 3},
+        ],
         objectDefault: {
           plan:'',
           section: '',
-          description: ''
+          description: '',
+          priority: 1,
         },
         createPath: '/api/v1/task/',
       }
@@ -119,6 +134,7 @@
             "plan": this.$route.params.planId,
             "section": this.object.section,
             "description": this.object.description,
+            "priority": this.object.priority,
           }
       },
 
