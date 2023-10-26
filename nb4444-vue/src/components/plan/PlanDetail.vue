@@ -32,6 +32,10 @@
           ></v-checkbox>
         </template>
 
+        <template v-slot:item.description="{ item }">
+          <div v-html="item.description" />
+        </template>
+
         <template v-slot:item.priority="{ item }">
           <v-select
             label="Select"
