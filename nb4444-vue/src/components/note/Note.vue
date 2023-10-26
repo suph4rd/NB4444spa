@@ -20,7 +20,7 @@
       <v-card v-if="index + 1 <= page * 10 && (page === 1 || index >= page * 10 - 10)" class="mb-5" >
         <v-card-text>
           <div>{{index + 1}}. {{item.user.username}}</div>
-          <div><span class="font-weight-bold">{{ item.created_at }}</span> {{ item.text }}</div>
+          <div><span class="font-weight-bold">{{ item.created_at }}</span> <span v-html="item.text" /></div>
         </v-card-text>
         <v-img v-if="item.image" :src="item.image"></v-img>
         <v-btn :to="{ name: 'NoteUpdate', params: {noteId: item.id} }" class="mt-5 ml-5 mb-5">
