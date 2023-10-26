@@ -21,6 +21,14 @@
               disabled
             ></v-text-field>
 
+            <v-select
+              label="Select"
+              :items="priorityList"
+              v-model="object.priority"
+              item-title="key"
+              item-value="val"
+            ></v-select>
+
             <v-textarea
               outlined
               v-model="object.description"
@@ -83,11 +91,18 @@
     data () {
       return {
         sections: [],
+        priorityList: [
+          {key: "Low", val: 0},
+          {key: "Medium", val: 1},
+          {key: "High", val: 2},
+          {key: "Hot", val: 3},
+        ],
         object: {
           plan:'',
           section: '',
           description: '',
-          is_ready: false
+          is_ready: false,
+          priority: 1,
         },
         updatePath: '/api/v1/task/',
       }
@@ -116,6 +131,7 @@
             "section": this.object.section.hasOwnProperty('id') ? this.object.section.id : this.object.section,
             "description": this.object.description,
             "is_ready": this.object.is_ready,
+            "priority": this.object.priority,
           }
       },
 
