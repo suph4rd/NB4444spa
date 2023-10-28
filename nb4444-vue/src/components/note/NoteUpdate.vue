@@ -32,36 +32,38 @@
       class="mt-5"
     ></v-file-input>
 
-    <div style="display: flex">
+    <div class="row">
 
         <v-btn
           color="success"
-          class="mr-4"
+          class="col btn-action"
           type="submit"
         >Отправить</v-btn>
 
         <v-btn
-          class="mr-4"
+          class="col btn-action"
           @click="resetForm"
           color="secondary"
         >Сброс</v-btn>
 
-        <Delete
-          @onDelete="redirectLogic"
-          :objId="object.id"
-          :deletePath="'/api/v1/note/'"
-          :titleDelete="'заметки'"
-          :messageDelete="'заметку'"
-          :is-simple="true"
-        >
-        </Delete>
-
-          <v-btn
-            class="ml-5"
-            :to="{ name: 'Note'}"
+        <div class="col btn-action" style="display: inline-block" >
+          <Delete
+            @onDelete="redirectLogic"
+            :objId="object.id"
+            :deletePath="'/api/v1/note/'"
+            :titleDelete="'заметки'"
+            :messageDelete="'заметку'"
+            :is-simple="true"
           >
-            Назад
-          </v-btn>
+          </Delete>
+        </div>
+
+        <v-btn
+          class="col btn-action"
+          :to="{ name: 'Note'}"
+        >
+          Назад
+        </v-btn>
 
       </div>
 
@@ -152,3 +154,9 @@
     },
   }
 </script>
+
+<style scoped>
+  .btn-action {
+    margin: 10px
+  }
+</style>
