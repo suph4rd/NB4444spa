@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 loadFonts()
 
@@ -15,6 +16,7 @@ app.use(router)
 app.use(store)
 app.use(vuetify)
 app.use(VueAxios, axios)
+app.use(CKEditor)
 
 // app.config.globalProperties.$apiHost = 'http://0.0.0.0:8008' // for dev
 app.config.globalProperties.$apiHost = 'http://0.0.0.0:9999' // for prod
