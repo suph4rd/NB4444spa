@@ -8,13 +8,18 @@
       @submit.prevent="updateNotes"
       v-if="object"
     >
-    <v-textarea
-      outlined
-      v-model="object.text"
-      rows="4"
-      label="Сообщение"
-      required
-    ></v-textarea>
+
+<!--    <v-textarea-->
+<!--      outlined-->
+<!--      v-model="object.text"-->
+<!--      rows="4"-->
+<!--      label="Сообщение"-->
+<!--      required-->
+<!--    ></v-textarea>-->
+
+    <div class="mb-5">
+      <ckeditor :editor="editor" v-model="object.text" :config="editorConfig"></ckeditor>
+    </div>
 
     <v-checkbox
       v-model="dropFile"
@@ -75,10 +80,11 @@
 <script>
   import header from "../../mixins/header";
   import Delete from "@/components/common_components/Delete.vue";
+  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
   export default {
     name: 'NoteUpdate',
-    components: {Delete},
+    components: {Delete, ClassicEditor},
     mixins: [header],
 
     data: function () {
@@ -90,6 +96,10 @@
           text: "",
           image: null,
         },
+
+        editor: ClassicEditor,
+        editorConfig: {},
+
       }
     },
     methods: {
