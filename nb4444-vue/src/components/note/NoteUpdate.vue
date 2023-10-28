@@ -8,13 +8,18 @@
       @submit.prevent="updateNotes"
       v-if="object"
     >
-    <v-textarea
-      outlined
-      v-model="object.text"
-      rows="4"
-      label="Сообщение"
-      required
-    ></v-textarea>
+
+<!--    <v-textarea-->
+<!--      outlined-->
+<!--      v-model="object.text"-->
+<!--      rows="4"-->
+<!--      label="Сообщение"-->
+<!--      required-->
+<!--    ></v-textarea>-->
+
+    <div class="mb-5">
+      <ckeditor :editor="editor" v-model="object.text" :config="editorConfig"></ckeditor>
+    </div>
 
     <v-checkbox
       v-model="dropFile"
@@ -32,36 +37,38 @@
       class="mt-5"
     ></v-file-input>
 
-    <div style="display: flex">
+    <div class="row">
 
         <v-btn
           color="success"
-          class="mr-4"
+          class="col btn-action"
           type="submit"
         >Отправить</v-btn>
 
         <v-btn
-          class="mr-4"
+          class="col btn-action"
           @click="resetForm"
           color="secondary"
         >Сброс</v-btn>
 
-        <Delete
-          @onDelete="redirectLogic"
-          :objId="object.id"
-          :deletePath="'/api/v1/note/'"
-          :titleDelete="'заметки'"
-          :messageDelete="'заметку'"
-          :is-simple="true"
-        >
-        </Delete>
-
-          <v-btn
-            class="ml-5"
-            :to="{ name: 'Note'}"
+        <div class="col btn-action" style="display: inline-block" >
+          <Delete
+            @onDelete="redirectLogic"
+            :objId="object.id"
+            :deletePath="'/api/v1/note/'"
+            :titleDelete="'заметки'"
+            :messageDelete="'заметку'"
+            :is-simple="true"
           >
-            Назад
-          </v-btn>
+          </Delete>
+        </div>
+
+        <v-btn
+          class="col btn-action"
+          :to="{ name: 'Note'}"
+        >
+          Назад
+        </v-btn>
 
       </div>
 
@@ -73,10 +80,11 @@
 <script>
   import header from "../../mixins/header";
   import Delete from "@/components/common_components/Delete.vue";
+  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
   export default {
     name: 'NoteUpdate',
-    components: {Delete},
+    components: {Delete, ClassicEditor},
     mixins: [header],
 
     data: function () {
@@ -88,6 +96,10 @@
           text: "",
           image: null,
         },
+
+        editor: ClassicEditor,
+        editorConfig: {},
+
       }
     },
     methods: {
@@ -152,3 +164,9 @@
     },
   }
 </script>
+
+<style scoped>
+  .btn-action {
+    margin: 10px
+  }
+</style>
