@@ -7,13 +7,17 @@
       :style="{'margin': '15px'}"
       @submit.prevent="createNotes"
     >
-    <v-textarea
-      outlined
-      v-model="text"
-      rows="4"
-      label="Сообщение"
-      required
-    ></v-textarea>
+<!--    <v-textarea-->
+<!--      outlined-->
+<!--      v-model="text"-->
+<!--      rows="4"-->
+<!--      label="Сообщение"-->
+<!--      required-->
+<!--    ></v-textarea>-->
+
+    <div class="mb-5">
+      <ckeditor :editor="editor" v-model="text" :config="editorConfig"></ckeditor>
+    </div>
 
     <v-file-input
       label="Файл"
@@ -34,16 +38,22 @@
 
 <script>
   import header from "../../mixins/header";
+  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
   export default {
     name: 'NoteCreate',
     mixins: [header],
+    components: {ClassicEditor},
 
     data: function () {
       return {
         "text": "",
         "image": null,
-        "fileval": null
+        "fileval": null,
+
+        editor: ClassicEditor,
+        editorConfig: {},
+
       }
     },
     methods: {

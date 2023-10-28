@@ -29,14 +29,18 @@
               item-value="val"
             ></v-select>
 
-            <v-textarea
-              outlined
-              v-model="object.description"
-              rows="4"
-              label="Описание"
-              :rules="[v => !!v] || 'Обязательное поле!'"
-              required
-            ></v-textarea>
+<!--            <v-textarea-->
+<!--              outlined-->
+<!--              v-model="object.description"-->
+<!--              rows="4"-->
+<!--              label="Описание"-->
+<!--              :rules="[v => !!v] || 'Обязательное поле!'"-->
+<!--              required-->
+<!--            ></v-textarea>-->
+
+            <div class="mb-5">
+              <ckeditor :editor="editor" v-model="object.description" :config="editorConfig"></ckeditor>
+            </div>
 
             <v-select
               v-model="object.section"
@@ -83,10 +87,12 @@
 <script>
   import header from "../../mixins/header";
   import updateMixin from "../../mixins/updateMixin";
+  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
   export default {
     name: "TaskUpdate",
     mixins: [header, updateMixin],
+    components: {ClassicEditor},
 
     data () {
       return {
@@ -105,6 +111,10 @@
           priority: 1,
         },
         updatePath: '/api/v1/task/',
+
+        editor: ClassicEditor,
+        editorConfig: {},
+
       }
     },
     methods: {

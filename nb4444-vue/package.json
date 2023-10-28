@@ -7,6 +7,8 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^40.0.0",
+    "@ckeditor/ckeditor5-vue": "^5.1.0",
     "@mdi/font": "5.9.55",
     "axios": "^1.5.1",
     "core-js": "^3.8.3",
