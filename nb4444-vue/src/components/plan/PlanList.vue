@@ -17,28 +17,32 @@
     >
       <template v-slot:item.actions="{ item }">
         <div class="actions-btn">
-          <v-row>
+          <div class="row">
+
             <v-btn icon :to="{ name: 'PlanDetail', params: {planId: item.id} }">
                 <v-icon
-                class="mr-2"
+                class="col"
                 >
                   mdi-information
                 </v-icon>
               </v-btn>
-          `  <v-btn icon :to="{ name: 'PlanUpdate', params: {planId: item.id} }">
+        `  <v-btn icon :to="{ name: 'PlanUpdate', params: {planId: item.id} }">
               <v-icon
-              class="mr-2"
-              >
+                class="col"
+                >
                 mdi-pencil
               </v-icon>
             </v-btn>
-            <Delete
+            <div class="col" style="display: inline-block">
+              <Delete
                 @onDelete="getData"
                 :objId="item.id"
                 :deletePath="'/api/v1/plan/'"
                 :titleDelete="'плана'"
                 :messageDelete="'план'" ></Delete>
-            </v-row>
+            </div>
+
+          </div>
         </div>
       </template>
     </v-data-table>
