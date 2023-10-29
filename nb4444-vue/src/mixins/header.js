@@ -9,9 +9,11 @@ export default {
             return headers;
         },
         dropSession(res) {
-            if (res) {
+            if (res && res.response) {
                alert(`status: ${res.response.status} message: ${res.response.statusText}`);
-            };
+            } else {
+                console.log(res)
+            }
             sessionStorage.removeItem('user');
             this.$router.push('login');
         },
