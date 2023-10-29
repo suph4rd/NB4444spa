@@ -128,7 +128,7 @@
           this.axios.patch(`${this.$apiHost}/api/v1/note/${this.$route.params.noteId}/`, data, {
             headers: headers
           }).then((result) =>{
-            this.redirectLogic();
+            this.redirectLogic(result);
         }).catch((res) => {
             this.dropSession(res);
         })
@@ -147,7 +147,7 @@
         });
       },
 
-      redirectLogic () {
+      redirectLogic (res) {
         this.$router.push({ name: 'Note'});
       },
 
