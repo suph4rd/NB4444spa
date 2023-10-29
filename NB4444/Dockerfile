@@ -13,8 +13,6 @@ COPY . /NB4444
 
 WORKDIR /NB4444
 
-RUN apt-get update &&
-
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install --only main
