@@ -10,6 +10,7 @@ from . import serializers
 from .mixins import CRWithUserMixin, ListFilterMixin
 from .permissions import IsSuperUserOrOwnerPermission
 from B4 import models as b4_models
+from django.contrib.auth.hashers import make_password
 
 
 @api_view(['GET'])
@@ -106,6 +107,15 @@ class UserViewSet(ModelViewSet):
         b4_models.User,
         local_exclude=[]
     )
+
+    def get_permissions(self):
+        if self.action != 'create':
+            return [permission() for permission in self.permission_classes]
+        return []
+
+    def perform_create(self, serializer):
+        serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
+        return super().perform_create(serializer)
 
     @action(methods=['get'], detail=False)
     def current_user(self, request, *args, **kwargs):

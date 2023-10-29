@@ -33,6 +33,15 @@
       class="mr-4"
       @click="reset"
     >Сброс</v-btn>
+
+    <v-btn
+      color="secondary"
+      :to="{ name: 'Registration'}"
+    >
+      Регистрация
+    </v-btn>
+
+
   </v-form>
   </div>
 </template>

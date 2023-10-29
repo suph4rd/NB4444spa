@@ -166,7 +166,7 @@
         })
       },
 
-      redirectLogic () {
+      redirectLogic (res) {
         this.$router.push({ name: 'PlanDetail', params: {planId: this.$route.params.planId}});
       },
 
