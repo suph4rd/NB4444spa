@@ -89,7 +89,7 @@
         })
       },
 
-      redirectLogic () {
+      redirectLogic (res) {
         this.$router.push({ name: 'PlanList'});
       },
 

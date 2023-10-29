@@ -7,11 +7,21 @@ const routes = [
     name: 'Main',
     component: () => import(/* webpackChunkName: "about" */ '../components/Main.vue')
   },
+
+  // Auth
   {
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName: "about" */ '../components/Login.vue')
   },
+  {
+    path: '/registration',
+    name: 'Registration',
+    component: () => import(/* webpackChunkName: "about" */ '../components/registration/UserCreate.vue')
+  },
+
+
+  // DefaultDeduction
   {
     path: '/default-deduction',
     name: 'DefaultDeduction',
@@ -74,7 +84,7 @@ export default router;
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login'];
+  const publicPages = ['/login', '/registration'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = sessionStorage.getItem('user');
 

@@ -19,11 +19,9 @@ export default {
         throw "Not implemented";
       },
 
-      resetForm() {
-        throw "Not implemented";
-      },
+      resetForm() {},
 
-      redirectLogic() {
+      redirectLogic(res) {
           throw "Not implemented"
       },
 
@@ -41,10 +39,16 @@ export default {
               headers: headers
             }).then((res) => {
                 this.resetForm();
-                this.redirectLogic();
+                this.redirectLogic(res);
             }).catch((res) => {
-            this.dropSession(res);
+                if (!this.handleBadRequest(res)){
+                    this.dropSession(res);
+                }
           });
+      },
+
+      handleBadRequest(res) {
+          return false
       },
 
   }
