@@ -13,10 +13,7 @@ COPY . /NB4444
 
 WORKDIR /NB4444
 
-RUN apt-get update && \
-    apt-get install -y locales && \
-    sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales
+RUN apt-get update &&
 
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
