@@ -17,8 +17,7 @@ app.use(store)
 app.use(vuetify)
 app.use(VueAxios, axios)
 app.use(CKEditor)
-
-// app.config.globalProperties.$apiHost = 'http://0.0.0.0:8008' // for dev
-app.config.globalProperties.$apiHost = 'http://0.0.0.0:9999' // for prod
+// app.config.globalProperties.$apiHost = `http://${document.location.hostname}:8008` // for dev
+app.config.globalProperties.$apiHost = `http://${document.location.hostname}:9999` // for prod
 
 app.mount('#app')
