@@ -26,13 +26,15 @@
                   mdi-information
                 </v-icon>
               </v-btn>
-        `  <v-btn icon :to="{ name: 'PlanUpdate', params: {planId: item.id} }">
+
+            <v-btn icon :to="{ name: 'PlanUpdate', params: {planId: item.id} }">
               <v-icon
                 class="col"
                 >
                 mdi-pencil
               </v-icon>
             </v-btn>
+
             <div class="col" style="display: inline-block">
               <Delete
                 @onDelete="getData"
