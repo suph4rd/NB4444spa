@@ -4,18 +4,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
 
 RUN apt-get update
-RUN apt-get install curl
+RUN apt-get install -y curl
 
 # RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 # RUN #apt-get install -y nodejs
 
-COPY . /NB4444
 
-WORKDIR /NB4444
+WORKDIR /nb4444
+COPY . .
 
-RUN pip3 install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install --only main
+RUN pip3 install -r requirements.txt
 
 ENV LANG ru_RU.UTF-8
 ENV LC_ALL ru_RU.UTF-8
