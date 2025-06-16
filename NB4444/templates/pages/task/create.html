@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static bootstrap5 %}
+{% block content %}
+    <h1 class="text-center">Создать задачу</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="detail">
+            <div class="row">
+                <div class="col mb-3">
+                    План: {{ plan }}
+                    {{ form.plan }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {% bootstrap_field form.section %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {% bootstrap_field form.priority %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="overflow: auto">
+                    {% bootstrap_field form.description %}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Создать</button>
+    </form>
+    <div class="row btn-active">
+        <a class="col btn btn-outline-info m-2" href="{{ request.META.HTTP_REFERER }}">
+            Назад
+        </a>
+        <a class="col btn btn-outline-secondary m-2" href="{% url 'b4:task_create' %}">
+            Сброс
+        </a>
+    </div>
+    {{ form.media }}
+{% endblock %}

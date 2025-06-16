@@ -1,0 +1,71 @@
+{% load bootstrap5 %}
+{% block page %}
+    {% load static bootstrap5 %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>
+            {% block title %} B4 {% endblock %}
+        </title>
+        {% block head %}
+            {% include 'head.html' %}
+        {% endblock %}
+    </head>
+
+    <style>
+
+    </style>
+
+    <body>
+    <a href="{% url 'b4:general' %}">
+        <div class="header">
+            <div>
+                <img id="btnMenu" src="/media/ss.jpg" alt="денюжка">
+            </div>
+            <div>БЧ</div>
+        </div>
+    </a>
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-3 d-none" id="LeftMenu">
+                {% if request.user.is_superuser %}
+                    <p><a href="{% url 'admin:index' %}">Панель администратора</a></p>
+                {% endif %}
+                <p><a href="{% url 'b4:default_deductions' %}">Стандартные вычеты</a></p>
+                <p><a href="{% url 'b4:note' %}">Заметки</a></p>
+                <p><a href="{% url 'b4:plan_list' %}">Планы</a></p>
+                {% if request.user.is_superuser %}
+                  <p><a href="{% url 'b4:bot_response' %}">Подгрузить заметки из телеграмм бота</a></p>
+                {% endif %}
+                <hr>
+                <p><a style="color:black" href="{% url 'b4:logout' %}">Выход</a></p>
+            </div>
+            <div id="Content" class="col">
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div{% if message.tags %} class="alert alert-{{ message.tags }}
+                                {% if message.tags == "error" %} alert-danger {% endif %}"{% endif %}>
+                                {{ message | safe}}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+
+    </body>
+    </html>
+{% endblock %}
+
+{% block media_block %}
+    {% if form %}
+        {{ form.media }}
+    {% endif %}
+{% endblock %}

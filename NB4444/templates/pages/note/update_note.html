@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+    <style>
+        .nb4Form {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nb4Form .item {
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <h1 class="text-center">Заметки</h1>
+    <form class="nb4Form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="overflow: auto">
+            {% bootstrap_field form.text %}
+        </div>
+        {% bootstrap_field form.image %}
+        {{ form.user }}
+        <div class="row">
+            <button type="submit" class="col btn btn-primary m-2">Отправить</button>
+            <a class="col btn btn-outline-info m-2" href="{% url 'b4:note' %}">
+                Назад
+            </a>
+            <a class="col btn btn-outline-danger m-2" href="{% url 'b4:note_delete' object.id %}">
+                Удалить
+            </a>
+        </div>
+    </form>
+{% endblock %}

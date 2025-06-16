@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static bootstrap5 %}
+{% block content %}
+    <div class="text-center">
+        <h1>Вы действительно хотите удалить?</h1>
+        <h2>{{ object }}</h2>
+    </div>
+    <div class="row btn-active">
+        <a class="col btn btn-outline-secondary" href="{% url 'b4:task_update' object.id %}">
+            Отмена
+        </a>
+        <form method="post" class="col">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-outline-danger"
+                   style="width: 100%"
+                   href="{% url 'b4:task_delete' object.id %}" value="Удалить">
+        </form>
+    </div>
+{% endblock %}

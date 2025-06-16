@@ -101,12 +101,12 @@ class Plan(TimeModel, AbstractSafeModel):
         return f"{self.id} {self.name}"
 
     def get_absolute_url(self):
-        return reverse('b4:plan_detail', args=(self.id,))
+        return reverse('web:plan_detail', args=(self.id,))
 
 
 class Section(TimeModel):
     name = models.CharField('Название раздела', max_length=255)
-    is_active = models.BooleanField('Активный', default=True)
+    is_active = models.BooleanField('Активный')
 
     class Meta:
         verbose_name = 'Раздел'
@@ -140,4 +140,4 @@ class Task(AbstractSafeModel, TimeModel):
         return f"{self.id} {self.plan} {self.section}"
 
     def get_absolute_url(self):
-        return reverse('b4:plan_detail', args=(self.plan_id,))
+        return reverse('web:plan_detail', args=(self.plan_id,))

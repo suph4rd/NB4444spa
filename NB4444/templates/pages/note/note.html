@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load bootstrap5 el_pagination_tags %}
+{% block content %}
+    <style>
+        .nb4Form {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nb4Form .item {
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <h1 class="text-center">Заметки</h1>
+    <form class="nb4Form" method="post" enctype="multipart/form-data" action="{% url 'b4:note_create' %}">
+        {% csrf_token %}
+        <div style="overflow: auto">
+            {% bootstrap_field form.text %}
+        </div>
+        {% bootstrap_field form.image %}
+        {{ form.user }}
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+    {% paginate object_list %}
+
+    {% if object_list %}
+        <hr/>
+
+        <div style="overflow: auto">{% show_pages %}</div>
+
+        <div style="padding:10px">
+            {% for obj in object_list %}
+                <div style="overflow: auto">
+              <span>
+                {% if user.is_superuser and obj.user == user %}
+                    It's you
+                {% endif %}
+              </span>
+                    <span style="font-weight: 800">
+                {% if user.is_superuser %}
+                    ({{ obj.user }})
+                {% endif %}
+              </span>
+                    <p> {{ forloop.counter }}. <b>{{ obj.created_at|date:"d.m.Y" }}</b> {{ obj.text | safe }}
+                        {% if obj.image %}
+                            <br>
+                            <img style="width:100%" src="{{ obj.image.url }}">
+                        {% endif %}
+                    </p>
+                </div>
+                {% if obj.user == request.user %}
+                    <div class="d-flex justify-content-end">
+                        <a class="col btn btn-outline-secondary" href="{% url 'b4:note_update' obj.id %}">
+                            Редактировать
+                        </a>
+                    </div>
+                {% endif %}
+                <hr/>
+            {% endfor %}
+        </div>
+
+        <div style="overflow: auto">{% show_pages %}</div>
+
+    {% endif %}
+{% endblock %}
