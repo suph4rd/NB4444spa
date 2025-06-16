@@ -45,9 +45,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'bootstrap5',
+    'el_pagination',
 
     # apps
     'B4.apps.B4Config',
+    'web.apps.WebConfig',
     'api',
 ]
 
