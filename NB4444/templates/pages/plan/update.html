@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static bootstrap5 %}
+{% block content %}
+    <h1 class="text-center">Редактировать План</h1>
+    <div class="alert-danger">{{ form.non_field_errors }}</div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="detail">
+            {% bootstrap_form form %}
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Отправить</button>
+    </form>
+    <div class="row btn-active">
+        <a class="col btn btn-outline-info m-2" href="{% url 'b4:plan_list' %}">
+            Назад
+        </a>
+        <a class="col btn btn-outline-secondary m-2" href="{% url 'b4:plan_update' object.id %}">
+            Отмена
+        </a>
+        <a class="col btn btn-outline-danger m-2" href="{% url 'b4:plan_delete' object.id %}">
+            Удалить
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div style="overflow: auto">
+        {% if obj %} <p>{{ obj.text | safe }}</p> {% endif %}
+        <img {% if obj.image %} src="{{ obj.image.url }}" {% else %} src="/media/lambaZel.jpg" {% endif %}
+                                alt="денюжка">
+    </div>
+
+    <style>
+        h1.phrase {
+            text-align: center;
+            margin-top: 33px
+        }
+
+        img {
+            width: 100%;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}

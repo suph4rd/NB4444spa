@@ -1,7 +1,10 @@
 version: "3.3"
 
+
 services:
   app_test:
-    build: .
+    build:
+      context: ./NB4444
+      dockerfile: prod.Dockerfile
     image: 'nb4444-dev-api-test'
     command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py test -v 2"

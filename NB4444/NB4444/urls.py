@@ -21,6 +21,7 @@ from NB4444 import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('web.urls', namespace='web')),
     path('api/', include('api.urls', namespace='api')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
