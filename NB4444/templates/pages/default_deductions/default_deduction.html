@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+    <h1 class="text-center">Стандартные вычеты</h1>
+    <form method="post" style="margin:15px;">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <p>Итого:
+            <span class="font-weight-bold">{{ obj.total }}</span>
+        </p>
+        <button type="submit" class="btn btn-primary">Обновить</button>
+    </form>
+{% endblock %}

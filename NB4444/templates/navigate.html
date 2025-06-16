@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-center">
+    <a class="btn btn-outline-danger m-2" href="?page=1">Начало</a>
+    {% if queryset.has_previous %}
+        <a class="btn btn-outline-success m-2" href="?page={{ queryset.previous_page_number }}">&laquo; Назад</a>
+    {% endif %}
+    {% if queryset.has_next %}
+        <a class="btn btn-outline-success m-2" href="?page={{ queryset.next_page_number }}">Следующая &raquo;</a>
+    {% endif %}
+    <a class="btn btn-outline-danger m-2" href="?page={{ queryset.paginator.num_pages }}">Последняя </a>
+</div>

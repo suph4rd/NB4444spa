@@ -1,0 +1,72 @@
+{% load static bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B4</title>
+    {% include 'head.html' %}
+</head>
+
+<style>
+    .row div:first-child form {
+        padding: 30px;
+        background-color: mediumaquamarine;
+        border-radius: 5px;
+    }
+
+    @media (max-width: 576px) {
+        .row img {
+            margin-top: 10px;
+        }
+    }
+
+    .row div:last-child {
+        border-radius: 5px;
+    }
+
+    .row div:last-child img {
+        width: 100%;
+        min-width: 200px;
+        border-radius: 5px;
+    }
+
+    h1.table-primary {
+        text-align: center;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: cornflowerblue
+    }
+
+    h1.warning {
+        text-align: center;
+        color: #a41515
+    }
+</style>
+
+<body>
+<div class="container-fluid">
+    <h1 class="table-primary">БЧ</h1>
+    {% if warning %}
+        <h1 class="warning">{{ warning }} </h1>
+    {% endif %}
+    <br>
+    <div class="row ml-1 mr-1">
+        <div class="col col-sm-3">
+            <form method="POST">
+                <div class="mb-3" style="display: flex; justify-content: space-between;">
+                    <a class="btn btn-outline-secondary" href="{% url 'b4:user_create' %}">Регистрация</a>
+                    {#              <a class="btn btn-outline-secondary" href="{% url 'vueapp_core:index' %}">Новая версия</a>#}
+                </div>
+                {% csrf_token %}
+                {% bootstrap_field user_form.username %}
+                {% bootstrap_field user_form.password %}
+                <button type="submit" class="btn btn-primary">Выполнить вход</button>
+            </form>
+        </div>
+        <div class="col">
+            <img src="/media/lambaZel.jpg" alt="ламба черная">
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% load static bootstrap5 %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B4</title>
+    {% include 'head.html' %}
+</head>
+
+<style>
+    h1.table-primary {
+        text-align: center;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: cornflowerblue
+    }
+
+    .container {
+        background-color: floralwhite;
+    }
+</style>
+
+<body>
+<h1 class="table-primary">БЧ</h1>
+<div class="container p-5">
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div style="display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary">Отправить</button>
+            <a class="btn btn-outline-secondary" href="{% url 'b4:login' %}" style="margin-left: 20px">Логин</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

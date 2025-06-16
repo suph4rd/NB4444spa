@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load bootstrap5 el_pagination_tags %}
+{% block content %}
+    <style>
+        .btn.btn-primary {
+            margin: 5px;
+        }
+    </style>
+
+    <h1 class="text-center">Планы</h1>
+    <div class="mb-4">
+        <a class="btn btn-primary" href="{% url 'b4:plan_create' %}">Создать план</a>
+        <a class="btn btn-primary" href="{% url 'b4:plan_today_create' %}">Создать план на сегодня</a>
+    </div>
+
+    {% paginate object_list %}
+
+    {% if object_list %}
+
+        <div style="overflow: auto">{% show_pages %}</div>
+
+        <div class="overflow-auto">
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Дата</th>
+                    <th>Пользователь</th>
+                    <th>Название плана</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in object_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ obj.created_at }}</td>
+                        <td>{{ obj.user }}</td>
+                        <td>{{ obj.name }}</td>
+                        <td>
+                            <a class="btn btn-outline-info m-2" href="{% url 'b4:plan_detail' obj.pk %}">Просмотр</a>
+                            {% if obj.user == user %}
+                                <a class="btn btn-outline-info m-2"
+                                   href="{% url 'b4:plan_update' obj.pk %}">Изменить</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div style="overflow: auto">{% show_pages %}</div>
+
+    {% else %}
+        Записи отсутствуют!
+    {% endif %}
+
+{% endblock %}

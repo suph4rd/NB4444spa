@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static bootstrap5 %}
+{% block content %}
+    {% if user.id == object.plan.user.id %}
+        <h1 class="text-center">Редактировать Задачу</h1>
+        <div class="alert-danger">{{ form.non_field_errors }}</div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="detail">
+                {% bootstrap_field form.is_ready %}
+                <div class="mb-3">
+                    План: {{ object.plan }}
+                    {{ form.plan }}
+                </div>
+                {% bootstrap_field form.priority %}
+                {% bootstrap_field form.section %}
+                <div style="overflow: auto">
+                    {% bootstrap_field form.description %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Отправить</button>
+        </form>
+        <div class="row btn-active">
+            <a class="col btn btn-outline-info m-2" href="{% url 'b4:plan_detail' object.plan.id %}">
+                Назад
+            </a>
+            <a class="col btn btn-outline-secondary m-2" href="{% url 'b4:task_update' object.id %}">
+                Отмена
+            </a>
+            <a class="col btn btn-outline-danger m-2" href="{% url 'b4:task_delete' object.id %}">
+                Удалить
+            </a>
+        </div>
+        {{ form.media }}
+    {% endif %}
+{% endblock %}

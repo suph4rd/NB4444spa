@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static bootstrap5 %}
+{% block content %}
+    <h1 class="text-center">Создать План</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="detail">
+            <div class="row">
+                <div class="col">
+                    {% bootstrap_field form.name %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {% bootstrap_field form.user %}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Отправить</button>
+    </form>
+    <div class="row btn-active">
+        <a class="col btn btn-outline-info m-2" href="{{ request.META.HTTP_REFERER }}">
+            Назад
+        </a>
+        <a class="col btn btn-outline-secondary m-2" href="{% url 'b4:plan_create' %}">
+            Сброс
+        </a>
+    </div>
+{% endblock %}
