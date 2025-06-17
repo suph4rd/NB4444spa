@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 RUN apt-get update
 RUN apt-get install -y curl
 
-WORKDIR /nb4444
+WORKDIR /NB4444
 COPY . .
 
 RUN pip3 install -r requirements.txt
