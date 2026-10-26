@@ -13,6 +13,7 @@ If you want to run project in production, you should to do next steps:
 4. Check availability and openness of ports 90 and 9999 <br>
 ( If port 90 is busy, change the host port in `docker-compose-prod.yml`. If the API port is changed, set `VUE_APP_API_PORT` in the shell or `.env` file before building; it is embedded in the frontend during the production build. )
 5. Run file update.sh in console, witch situated in the root of the project
+   After a successful deployment, `docker image prune -f` removes dangling images from the Docker host (not only this project); tagged or in-use images are retained.
 6. Default superuser credentials:
     - username: admin
     - password: 55555
