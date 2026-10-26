@@ -5,7 +5,7 @@
     v-model="valid"
     lazy-validation
     :style="{'width': '500px'}"
-    @submit="login"
+    @submit.prevent="login"
   >
     <v-text-field
       v-model="username"
@@ -67,25 +67,21 @@
       validate () {
         this.$refs.form.validate()
       },
-      login(e) {
-          e.preventDefault();
+      login() {
           this.axios.post( `${this.$apiHost}/auth/jwt/create/`, {
             "username": this.username,
             "password": this.password
           }).then((result) =>{
-            if (result.status === 200) {
-              let userTokens = result.data
-              sessionStorage.setItem('user', JSON.stringify(userTokens));
-              this.getUserInfo();
-            } else {
-              sessionStorage.removeItem('user');
-              alert("Ошибка отправки запроса!")
+            if (!result.data || !result.data.access) {
+              throw new Error('The authentication response did not contain an access token.')
             }
+            this.$store.commit('setUser', result.data)
+            this.getUserInfo()
         }).catch((res) => {
             if (res.response) {
               alert(`status: ${res.response.status} message: ${res.response.statusText}`)
             }
-            console.log(res);
+            console.error(res)
           })
       },
 
@@ -94,11 +90,16 @@
         this.axios.get(`${this.$apiHost}/api/v1/user/current_user/`, {
           headers: headers
         }).then((result) => {
-          let userInfo = result.data;
-          let userTokens = JSON.parse(sessionStorage.getItem('user'));
-          userInfo = Object.assign(userInfo, userTokens);
-          sessionStorage.setItem('user', JSON.stringify(userInfo));
-          this.$router.push('/');
+          const userInfo = Object.assign({}, this.$store.state.user, result.data)
+          this.$store.commit('setUser', userInfo)
+
+          const redirect = this.$route.query.redirect
+          const destination = typeof redirect === 'string'
+            && redirect.startsWith('/')
+            && !redirect.startsWith('//')
+            ? redirect
+            : { name: 'Main' }
+          this.$router.replace(destination)
         }).catch((res) => {
             this.dropSession(res);
             alert("Не удалось получить информацию о пользователе!!");
@@ -111,4 +112,3 @@
     },
   }
 </script>
-

@@ -18,7 +18,7 @@ export default {
           this.objects = result.data;
         }).catch((res) => {
             if (!this.handleError(res)){
-                this.dropSession(err);
+                this.dropSession(res);
             }
         });
     },

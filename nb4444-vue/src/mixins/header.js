@@ -1,21 +1,29 @@
 export default {
     methods: {
         getHeaders() {
-            let user = JSON.parse(sessionStorage.getItem('user'));
-            let headers = user ? {
+            return {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.access}`,
-            } : {};
-            return headers;
+            };
         },
         dropSession(res) {
-            if (res && res.response) {
-               alert(`status: ${res.response.status} message: ${res.response.statusText}`);
-            } else {
-                console.log(res)
+            const status = res && res.response && res.response.status
+
+            if (status === 401) {
+                this.$store.commit('clearUser')
+                if (this.$route.name !== 'Login') {
+                    this.$router.replace({
+                        name: 'Login',
+                        query: { redirect: this.$route.fullPath },
+                    })
+                }
+                return
             }
-            sessionStorage.removeItem('user');
-            this.$router.push('login');
+
+            if (res && res.response) {
+                alert(`status: ${status} message: ${res.response.statusText}`)
+            } else {
+                console.error(res)
+            }
         },
     }
 }
