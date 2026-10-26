@@ -40,7 +40,7 @@
 
 <script>
   import header from "../../mixins/header";
-  import NoteCreate from "./NoteCreate";
+  import NoteCreate from "./NoteCreate.vue";
   import listMixin from "../../mixins/listMixin";
 
   export default {

@@ -5,14 +5,12 @@
 
       <v-btn
           color="success"
-          dark
           :to="{ name: 'TaskCreate', params: {planId: this.$route.params.planId} }"
         >
           Создать
         </v-btn>
       <v-btn
-          color="lighten-2"
-          dark
+          color="blue-grey-lighten-2"
           :to="{ name: 'PlanList'}"
           class="ml-5"
         >
@@ -78,9 +76,9 @@
 <script>
 import header from "../../mixins/header";
 import listMixin from "../../mixins/listMixin";
-import TaskCreate from "../task/TaskCreate";
-import TaskUpdate from "../task/TaskUpdate";
-import Delete from "../common_components/Delete";
+import TaskCreate from "../task/TaskCreate.vue";
+import TaskUpdate from "../task/TaskUpdate.vue";
+import Delete from "../common_components/Delete.vue";
 
 export default {
   name: "PlanDetail",

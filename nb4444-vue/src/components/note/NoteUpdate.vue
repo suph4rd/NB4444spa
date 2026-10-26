@@ -3,7 +3,7 @@
     <v-card :style="{'width': '100%'}">
     <v-form
       ref="form"
-      lazy-validation
+      validate-on="submit lazy"
       :style="{'margin': '15px'}"
       @submit.prevent="updateNotes"
       v-if="object"
@@ -31,8 +31,8 @@
 
     <v-file-input
       label="Файл"
-      outlined
-      dense
+      variant="outlined"
+      density="compact"
       v-model="newImage"
       class="mt-5"
     ></v-file-input>
@@ -80,11 +80,11 @@
 <script>
   import header from "../../mixins/header";
   import Delete from "@/components/common_components/Delete.vue";
-  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+  import { ClassicEditor, editorConfig } from "@/plugins/ckeditor";
 
   export default {
     name: 'NoteUpdate',
-    components: {Delete, ClassicEditor},
+    components: {Delete},
     mixins: [header],
 
     data: function () {
@@ -98,7 +98,7 @@
         },
 
         editor: ClassicEditor,
-        editorConfig: {},
+        editorConfig,
 
       }
     },

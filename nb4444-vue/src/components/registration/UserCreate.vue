@@ -9,7 +9,7 @@
       >
 
       <v-text-field
-        outlined
+        variant="outlined"
         v-model="obj.username"
         rows="4"
         label="Логин"
@@ -18,7 +18,7 @@
       ></v-text-field>
 
       <v-text-field
-        outlined
+        variant="outlined"
         v-model="obj.password"
         rows="4"
         label="Пароль"
@@ -28,7 +28,7 @@
       ></v-text-field>
 
       <v-text-field
-        outlined
+        variant="outlined"
         v-model="obj.firstName"
         rows="4"
         label="Имя"
@@ -37,7 +37,7 @@
       ></v-text-field>
 
       <v-text-field
-        outlined
+        variant="outlined"
         v-model="obj.lastName"
         rows="4"
         label="Фамилия"
@@ -46,7 +46,7 @@
       ></v-text-field>
 
       <v-text-field
-        outlined
+        variant="outlined"
         v-model="obj.email"
         rows="4"
         label="Электронная почта"
@@ -63,9 +63,9 @@
       >Отправить</v-btn>
 
       <v-btn
-        color="danger"
+        color="error"
         class="mr-4"
-        text
+        variant="text"
         @click="resetForm"
       >
         Сбросить

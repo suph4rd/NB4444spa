@@ -1,11 +1,11 @@
-FROM node:lts-alpine AS build-stage
+FROM node:24-alpine AS build-stage
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
 COPY . .
-ARG VUE_APP_API_PORT=9999
+ARG VITE_API_PORT=9999
 RUN npm run build
 
 FROM nginx:alpine AS production-stage
