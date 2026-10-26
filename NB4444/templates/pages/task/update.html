@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static bootstrap5 %}
+{% load static django_bootstrap5 %}
 {% block content %}
     {% if user.id == object.plan.user.id %}
         <h1 class="text-center">Редактировать Задачу</h1>
