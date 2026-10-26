@@ -2,19 +2,19 @@
   <v-app>
 
     <v-app-bar color="green accent-3" app>
-      <v-app-bar-nav-icon v-if="this.$route.name !== 'Login' " @click="onLeftMenu"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-if="$store.getters.isAuthenticated" @click="onLeftMenu"></v-app-bar-nav-icon>
       <v-col
       class="text-center"
     >
       <h1>БЧ</h1>
     </v-col>
-    <v-col v-if="this.$route.name !== 'Login' " cols="2" class="text-end">
+    <v-col v-if="$store.getters.isAuthenticated" cols="2" class="text-end">
       <button @click="logout">Выход</button>
     </v-col>
     </v-app-bar>
 
     <v-navigation-drawer
-        v-if="this.$route.name !== 'Login'"
+        v-if="$store.getters.isAuthenticated"
         v-model="leftMenu"
         location="left"
         temporary
@@ -94,8 +94,8 @@ export default {
       })
     },
     logout() {
-      sessionStorage.removeItem('user');
-      this.$router.push('login')
+      this.$store.commit('clearUser')
+      this.$router.replace({ name: 'Login' })
     }
   }
 };

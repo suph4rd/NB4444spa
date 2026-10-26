@@ -70,7 +70,7 @@
       },
 
       getFormParams() {
-        let user = JSON.parse(sessionStorage.getItem('user'));
+        let user = this.$store.state.user;
         return {
             "name": this.object.name,
             "user": user.id,
