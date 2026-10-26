@@ -4,7 +4,6 @@
     <v-btn
       color="success"
       class="mb-5"
-      dark
       :to="{ name: 'PlanCreate'}"
     >
       Создать
@@ -54,9 +53,9 @@
 <script>
 import header from "../../mixins/header";
 import listMixin from "../../mixins/listMixin";
-import PlanCreate from "./PlanCreate";
-import PlanUpdate from "./PlanUpdate";
-import Delete from "../common_components/Delete";
+import PlanCreate from "./PlanCreate.vue";
+import PlanUpdate from "./PlanUpdate.vue";
+import Delete from "../common_components/Delete.vue";
 
 export default {
   name: "PlanList",

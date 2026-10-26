@@ -1,7 +1,7 @@
 <template>
   <div>
       <v-card>
-        <h2 class="grey lighten-2 text-center">Создание плана</h2>
+        <h2 class="bg-grey-lighten-2 text-center">Создание плана</h2>
           <v-form
             ref="form"
             @submit.prevent="validForm"
@@ -21,21 +21,21 @@
               <v-spacer></v-spacer>
               <v-btn
                 color="success"
-                text
+                variant="text"
                 type="submit"
               >
                 Создать
               </v-btn>
               <v-btn
-                color="danger"
-                text
+                color="error"
+                variant="text"
                 @click="reset"
               >
                 Сбросить
               </v-btn>
               <v-btn
                 color="secondary"
-                text
+                variant="text"
                 :to="{ name: 'PlanList'}"
               >
                 Назад

@@ -20,7 +20,7 @@ services:
       context: ./nb4444-vue
       dockerfile: prod.Dockerfile
       args:
-        VUE_APP_API_PORT: ${VUE_APP_API_PORT:-9999}
+        VITE_API_PORT: ${VITE_API_PORT:-9999}
     image: 'nb4444-prod-vue'
     ports:
       - "90:80"

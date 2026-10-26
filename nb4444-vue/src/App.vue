@@ -1,7 +1,7 @@
 <template>
   <v-app>
 
-    <v-app-bar color="green accent-3" app>
+    <v-app-bar color="green-accent-3">
       <v-app-bar-nav-icon v-if="$store.getters.isAuthenticated" @click="onLeftMenu"></v-app-bar-nav-icon>
       <v-col
       class="text-center"
@@ -30,7 +30,7 @@
       </v-navigation-drawer>
 
     <!-- Sizes your content based upon application components -->
-    <v-main class="blue-grey lighten-5">
+    <v-main class="bg-blue-grey-lighten-5">
 
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
@@ -40,7 +40,7 @@
       </v-container>
     </v-main>
 
-    <v-footer padless class="green accent-4">
+    <v-footer class="bg-green-accent-4 pa-0">
     <v-col
       class="text-center"
       cols="12"

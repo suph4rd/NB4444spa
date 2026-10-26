@@ -3,7 +3,7 @@
   <v-form
     ref="form"
     v-model="valid"
-    lazy-validation
+    validate-on="submit lazy"
     :style="{'width': '500px'}"
     @submit.prevent="login"
   >

@@ -18,7 +18,7 @@
       </template>
 
       <v-card>
-        <h2 class="grey lighten-2 text-center mb-5">Удаление {{ titleDelete }}
+        <h2 class="bg-grey-lighten-2 text-center mb-5">Удаление {{ titleDelete }}
         </h2>
             <v-card-text>
               Вы действительно хотете удалить {{ messageDelete }}?
@@ -29,7 +29,7 @@
               <v-spacer></v-spacer>
               <v-btn
                 color="primary"
-                text
+                variant="text"
                 type="submit"
                 @click="sendDeleteForm"
               >
@@ -37,7 +37,7 @@
               </v-btn>
               <v-btn
                 color="secondary"
-                text
+                variant="text"
                 @click="dialogDelete = false"
               >
                 Отмена
