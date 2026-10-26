@@ -81,7 +81,7 @@
     methods: {
       sendDefaultDeductions(e) {
             let headers = this.getHeaders();
-            let user = JSON.parse(sessionStorage.getItem('user'));
+            let user = this.$store.state.user;
             let data = {
               "house": this.objects.house,
               "travel": this.objects.travel,
@@ -105,4 +105,3 @@
     }
   }
 </script>
-

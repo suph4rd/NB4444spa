@@ -7,6 +7,7 @@ import { loadFonts } from './plugins/webfontloader'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import configureAuthInterceptors from './services/authInterceptors'
 
 loadFonts()
 
@@ -20,5 +21,6 @@ app.use(VueAxios, axios)
 
 app.use(CKEditor)
 app.config.globalProperties.$apiHost = `http://${document.location.hostname}:${apiPort}`
+configureAuthInterceptors(axios, store, router, app.config.globalProperties.$apiHost)
 
 app.mount('#app')

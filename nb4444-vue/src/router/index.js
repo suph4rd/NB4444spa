@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store'
 
 
 const routes = [
   {
     path: '/',
     name: 'Main',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/Main.vue')
   },
 
@@ -12,11 +14,13 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: { requiresAuth: false },
     component: () => import(/* webpackChunkName: "about" */ '../components/Login.vue')
   },
   {
     path: '/registration',
     name: 'Registration',
+    meta: { requiresAuth: false },
     component: () => import(/* webpackChunkName: "about" */ '../components/registration/UserCreate.vue')
   },
 
@@ -25,6 +29,7 @@ const routes = [
   {
     path: '/default-deduction',
     name: 'DefaultDeduction',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/delault_deduction/DefaultDeduction.vue')
   },
 
@@ -32,11 +37,13 @@ const routes = [
   {
     path: '/note',
     name: 'Note',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/note/Note')
   },
   {
     path: '/note/:noteId',
     name: 'NoteUpdate',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/note/NoteUpdate.vue')
   },
 
@@ -44,32 +51,38 @@ const routes = [
   {
     path: '/plan-list',
     name: 'PlanList',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanList.vue')
   },
   {
     path: '/plan/create',
     name: 'PlanCreate',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanCreate.vue')
   },
   {
     path: '/plan/:planId',
     name: 'PlanDetail',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanDetail.vue')
   },
   {
     path: '/plan/:planId/update',
     name: 'PlanUpdate',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanUpdate.vue')
   },
     // Task
     {
     path: '/plan/:planId/task/create',
     name: 'TaskCreate',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/task/TaskCreate.vue')
   },
   {
     path: '/plan/:planId/task/:taskId/update',
     name: 'TaskUpdate',
+    meta: { requiresAuth: true },
     component: () => import(/* webpackChunkName: "about" */ '../components/task/TaskUpdate.vue')
   },
 
@@ -82,14 +95,15 @@ const router = createRouter({
 
 export default router;
 
-router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/registration'];
-  const authRequired = !publicPages.includes(to.path);
-  const loggedIn = sessionStorage.getItem('user');
-
-  if (authRequired && !loggedIn) {
-    return next('/login');
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
+    return {
+      name: 'Login',
+      query: { redirect: to.fullPath },
+    }
   }
-  next();
-});
+
+  if (to.name === 'Login' && store.getters.isAuthenticated) {
+    return { name: 'Main' }
+  }
+})
