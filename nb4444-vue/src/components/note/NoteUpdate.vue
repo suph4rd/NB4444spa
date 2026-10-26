@@ -105,18 +105,19 @@
     methods: {
 
       updateNotes() {
-          if (!this.object.text && !this.object.image) {
+          const image = Array.isArray(this.newImage) ? this.newImage[0] : this.newImage;
+          if (!this.object.text && !this.object.image && !image) {
             alert("Форма пуста!");
             return;
           }
           let data;
           let headers = this.getHeaders();
-          if (this.newImage) {
+          if (image) {
             let formData = new FormData()
             formData.append("text", this.object.text);
-            formData.append("image",  this.newImage[0], this.newImage[0].name);
+            formData.append("image", image, image.name);
             data = formData;
-            headers['Content-Type'] = 'multipart/form-data';
+            delete headers['Content-Type'];
           } else {
             data = {
               "text": this.object.text,
