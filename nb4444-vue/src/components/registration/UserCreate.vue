@@ -1,151 +1,215 @@
 <template>
   <div class="main-content">
-    <v-card :style="{'width': '100%'}">
-      <v-form
-        ref="form"
-        :style="{'margin': '15px'}"
-        @submit.prevent="validForm"
-        v-if="obj"
-      >
+    <v-card :style="{ width: '100%' }">
+      <v-card-title class="text-center">Регистрация</v-card-title>
+      <v-card-text>
+        <v-form
+          ref="form"
+          validate-on="submit lazy"
+          :style="{ margin: '15px' }"
+          @submit.prevent="submitForm"
+        >
+          <v-alert
+            v-if="errorMessage"
+            type="error"
+            role="alert"
+            class="mb-4"
+          >
+            {{ errorMessage }}
+          </v-alert>
 
-      <v-text-field
-        variant="outlined"
-        v-model="obj.username"
-        rows="4"
-        label="Логин"
-        required
-        :rules="[v => !!v] || 'Обязательное поле!'"
-      ></v-text-field>
+          <v-text-field
+            v-model="obj.username"
+            variant="outlined"
+            label="Логин"
+            autocomplete="username"
+            required
+            :rules="usernameRules"
+            :disabled="submitting"
+          ></v-text-field>
 
-      <v-text-field
-        variant="outlined"
-        v-model="obj.password"
-        rows="4"
-        label="Пароль"
-        required
-        type="password"
-        :rules="[v => !!v] || 'Обязательное поле!'"
-      ></v-text-field>
+          <v-text-field
+            v-model="obj.password"
+            variant="outlined"
+            label="Пароль"
+            type="password"
+            autocomplete="new-password"
+            required
+            :rules="passwordRules"
+            :disabled="submitting"
+          ></v-text-field>
 
-      <v-text-field
-        variant="outlined"
-        v-model="obj.firstName"
-        rows="4"
-        label="Имя"
-        required
-        :rules="[v => !!v] || 'Обязательное поле!'"
-      ></v-text-field>
+          <v-text-field
+            v-model="obj.first_name"
+            variant="outlined"
+            label="Имя"
+            autocomplete="given-name"
+            required
+            :rules="nameRules"
+            :disabled="submitting"
+          ></v-text-field>
 
-      <v-text-field
-        variant="outlined"
-        v-model="obj.lastName"
-        rows="4"
-        label="Фамилия"
-        required
-        :rules="[v => !!v] || 'Обязательное поле!'"
-      ></v-text-field>
+          <v-text-field
+            v-model="obj.last_name"
+            variant="outlined"
+            label="Фамилия"
+            autocomplete="family-name"
+            required
+            :rules="nameRules"
+            :disabled="submitting"
+          ></v-text-field>
 
-      <v-text-field
-        variant="outlined"
-        v-model="obj.email"
-        rows="4"
-        label="Электронная почта"
-        required
-        type="email"
-        :rules="[v => !!v] || 'Обязательное поле!'"
-      ></v-text-field>
+          <v-text-field
+            v-model="obj.email"
+            variant="outlined"
+            label="Электронная почта"
+            type="email"
+            autocomplete="email"
+            required
+            :rules="emailRules"
+            :disabled="submitting"
+          ></v-text-field>
 
+          <div class="d-flex flex-wrap ga-3">
+            <v-btn
+              color="success"
+              type="submit"
+              :loading="submitting"
+              :disabled="submitting"
+            >
+              Зарегистрироваться
+            </v-btn>
 
-      <v-btn
-        color="success"
-        class="mr-4"
-        type="submit"
-      >Отправить</v-btn>
+            <v-btn
+              color="error"
+              variant="text"
+              type="button"
+              :disabled="submitting"
+              @click="resetForm"
+            >
+              Сбросить
+            </v-btn>
 
-      <v-btn
-        color="error"
-        class="mr-4"
-        variant="text"
-        @click="resetForm"
-      >
-        Сбросить
-      </v-btn>
-
-      <v-btn
-        color="secondary"
-        :to="{ name: 'Login'}"
-      >
-        Войти
-      </v-btn>
-
-    </v-form>
-  </v-card>
+            <v-btn
+              color="secondary"
+              type="button"
+              :to="{ name: 'Login' }"
+              :disabled="submitting"
+            >
+              Войти
+            </v-btn>
+          </div>
+        </v-form>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
 <script>
-  import header from "../../mixins/header";
-  import createMixin from "@/mixins/createMixin";
+  import header from '@/mixins/header'
 
+  const createEmptyForm = () => ({
+    username: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+  })
+
+  const fieldLabels = {
+    username: 'Логин',
+    password: 'Пароль',
+    first_name: 'Имя',
+    last_name: 'Фамилия',
+    email: 'Электронная почта',
+    non_field_errors: 'Ошибка',
+    detail: 'Ошибка',
+  }
 
   export default {
     name: 'UserCreate',
-    mixins: [header, createMixin],
+    mixins: [header],
 
-    data: function () {
-      return {
-        defaultObj: {
-          password: '',
-          firstName: '',
-          lastName: '',
-          username: '',
-          email: '',
-        },
+    data: () => ({
+      obj: createEmptyForm(),
+      createPath: '/api/v1/user/',
+      submitting: false,
+      errorMessage: '',
+      usernameRules: [value => !!value?.trim() || 'Введите логин'],
+      passwordRules: [
+        value => !!value || 'Введите пароль',
+        value => value.length >= 8 || 'Пароль должен содержать не менее 8 символов',
+      ],
+      nameRules: [value => !!value?.trim() || 'Заполните это поле'],
+      emailRules: [
+        value => !!value?.trim() || 'Введите электронную почту',
+        value => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || 'Введите корректный адрес электронной почты',
+      ],
+    }),
 
-        obj: null,
-
-        createPath: '/api/v1/user/',
-
-      }
-    },
     methods: {
-
       getFormParams() {
-        return {
-            "password": this.obj.password,
-            "firstName": this.obj.firstName,
-            "lastName": this.obj.lastName,
-            "username": this.obj.username,
-            "email": this.obj.email,
+        return { ...this.obj }
+      },
+
+      async submitForm() {
+        if (this.submitting) {
+          return
+        }
+
+        this.submitting = true
+        this.errorMessage = ''
+
+        try {
+          const { valid } = await this.$refs.form.validate()
+          if (!valid) {
+            return
           }
-      },
 
-      preMount(){
-        this.obj = Object.assign({}, this.defaultObj);
-      },
-
-      validForm(e) {
-        this.$refs.form.validate().then((resp) => {
-          if (resp.valid) {
-            this.sendForm(e);
+          let response
+          try {
+            response = await this.axios.post(
+              `${this.$apiHost}${this.createPath}`,
+              this.getFormParams(),
+              { headers: this.getHeaders() },
+            )
+          } catch (error) {
+            this.errorMessage = this.getApiErrorMessage(error)
+            if (!error?.response) {
+              console.error(error)
+            }
+            return
           }
-        })
+
+          alert(`Пользователь ${response.data.username} успешно создан! Пожалуйста авторизуйтесь!`)
+          await this.$router.push({ name: 'Login' })
+        } finally {
+          this.submitting = false
+        }
       },
 
-      redirectLogic(res) {
-          alert(`Пользователь ${res.data.username} успешно создан! Пожалуйста авторизуйтесь!`);
-          this.$router.push({ name: 'Login'});
+      getApiErrorMessage(error) {
+        const responseData = error?.response?.data
+        if (responseData && typeof responseData === 'object') {
+          const messages = Object.entries(responseData)
+            .map(([field, fieldErrors]) => {
+              const label = fieldLabels[field] || field
+              const message = Array.isArray(fieldErrors) ? fieldErrors.join(' ') : String(fieldErrors)
+              return `${label}: ${message}`
+            })
+          if (messages.length) {
+            return messages.join('\n')
+          }
+        }
+
+        return 'Не удалось создать пользователя. Проверьте соединение и попробуйте ещё раз.'
       },
 
       resetForm() {
-        this.obj = Object.assign({}, this.defaultObject);
+        this.obj = createEmptyForm()
+        this.errorMessage = ''
+        this.$nextTick(() => this.$refs.form?.resetValidation())
       },
-
-      handleBadRequest(res) {
-        alert(JSON.stringify(res.response.data));
-        return true
-      }
-
-    }
+    },
   }
 </script>

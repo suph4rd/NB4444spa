@@ -7,9 +7,11 @@ RUN apt-get update
 RUN apt-get install -y curl
 
 WORKDIR /NB4444
-COPY . .
+COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
+
+COPY . .
 
 ENV LANG ru_RU.UTF-8
 ENV LC_ALL ru_RU.UTF-8
