@@ -5,10 +5,8 @@
       width="500"
     >
       <template v-slot:activator="{ on, attrs }">
-          <v-btn icon @click="showDeleteDialog" v-if="!isSimple">
-            <v-icon
-              class="mr-2"
-            >
+          <v-btn icon aria-label="Удалить" @click="showDeleteDialog" v-if="!isSimple">
+            <v-icon>
               mdi-delete
             </v-icon>
           </v-btn>

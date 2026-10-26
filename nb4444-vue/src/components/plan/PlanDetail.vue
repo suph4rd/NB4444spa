@@ -3,25 +3,27 @@
     <v-container v-if="objects">
       <h1 class="text-center">План {{objects.name}} ({{objects.user.username}})</h1>
 
-      <v-btn
+      <div class="plan-detail-toolbar">
+        <v-btn
           color="success"
           :to="{ name: 'TaskCreate', params: {planId: this.$route.params.planId} }"
         >
           Создать
         </v-btn>
-      <v-btn
+        <v-btn
           color="blue-grey-lighten-2"
           :to="{ name: 'PlanList'}"
-          class="ml-5"
         >
           Назад
         </v-btn>
+      </div>
 
       <v-data-table
         :headers="headers"
         :items="objects.task_set"
         :items-per-page="10"
         :loading="loading"
+        class="mt-4"
       >
         <template v-slot:item.is_ready="{ item }">
           <v-checkbox
@@ -48,24 +50,19 @@
 
 
         <template v-slot:item.actions="{ item }">
-          <div class="actions-btn">
-            <v-btn icon :to="{ name: 'TaskUpdate', params: {taskId: item.id, planId: this.$route.params.planId} }" >
-              <v-icon
-                class="mr-2"
-              >
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-
+          <div class="task-actions">
+            <v-btn
+              icon="mdi-pencil"
+              aria-label="Редактировать задачу"
+              :to="{ name: 'TaskUpdate', params: {taskId: item.id, planId: this.$route.params.planId} }"
+            ></v-btn>
             <Delete
-                @onDelete="getData"
-                :objId="item.id"
-                :deletePath="'/api/v1/task/'"
-                :titleDelete="'задачи'"
-                :messageDelete="'задачу'" >
-
-            </Delete>
-
+              @onDelete="getData"
+              :objId="item.id"
+              :deletePath="'/api/v1/task/'"
+              :titleDelete="'задачи'"
+              :messageDelete="'задачу'"
+            ></Delete>
           </div>
         </template>
       </v-data-table>
@@ -140,8 +137,17 @@ export default {
 </script>
 
 <style>
-  .actions-btn {
-    display: flex;
-    justify-content: end;
-  }
+.plan-detail-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
 </style>
