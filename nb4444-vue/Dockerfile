@@ -1,20 +1,11 @@
-FROM node:lts-alpine as build-stage
+FROM node:24-alpine
 
-RUN apk --no-cache add curl
-
-# install simple http server for serving static content
-RUN npm install -g http-server
-
-# make the 'app' folder the current working directory
-RUN mkdir app
-COPY . ./app
 WORKDIR /app
 
-# install project dependencies
-RUN npm install
+COPY package*.json ./
+RUN npm ci
 
-# build app for production with minification
-RUN #npm run build
+COPY . .
 
 EXPOSE 8080
-CMD [ "http-server", "dist" ]
+CMD ["npm", "run", "serve"]

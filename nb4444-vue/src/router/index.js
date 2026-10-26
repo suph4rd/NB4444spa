@@ -7,7 +7,7 @@ const routes = [
     path: '/',
     name: 'Main',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/Main.vue')
+    component: () => import('../components/Main.vue')
   },
 
   // Auth
@@ -15,13 +15,13 @@ const routes = [
     path: '/login',
     name: 'Login',
     meta: { requiresAuth: false },
-    component: () => import(/* webpackChunkName: "about" */ '../components/Login.vue')
+    component: () => import('../components/Login.vue')
   },
   {
     path: '/registration',
     name: 'Registration',
     meta: { requiresAuth: false },
-    component: () => import(/* webpackChunkName: "about" */ '../components/registration/UserCreate.vue')
+    component: () => import('../components/registration/UserCreate.vue')
   },
 
 
@@ -30,7 +30,7 @@ const routes = [
     path: '/default-deduction',
     name: 'DefaultDeduction',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/delault_deduction/DefaultDeduction.vue')
+    component: () => import('../components/delault_deduction/DefaultDeduction.vue')
   },
 
   // Note
@@ -38,13 +38,13 @@ const routes = [
     path: '/note',
     name: 'Note',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/note/Note')
+    component: () => import('../components/note/Note.vue')
   },
   {
     path: '/note/:noteId',
     name: 'NoteUpdate',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/note/NoteUpdate.vue')
+    component: () => import('../components/note/NoteUpdate.vue')
   },
 
     // Plan
@@ -52,44 +52,44 @@ const routes = [
     path: '/plan-list',
     name: 'PlanList',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanList.vue')
+    component: () => import('../components/plan/PlanList.vue')
   },
   {
     path: '/plan/create',
     name: 'PlanCreate',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanCreate.vue')
+    component: () => import('../components/plan/PlanCreate.vue')
   },
   {
     path: '/plan/:planId',
     name: 'PlanDetail',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanDetail.vue')
+    component: () => import('../components/plan/PlanDetail.vue')
   },
   {
     path: '/plan/:planId/update',
     name: 'PlanUpdate',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/plan/PlanUpdate.vue')
+    component: () => import('../components/plan/PlanUpdate.vue')
   },
     // Task
     {
     path: '/plan/:planId/task/create',
     name: 'TaskCreate',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/task/TaskCreate.vue')
+    component: () => import('../components/task/TaskCreate.vue')
   },
   {
     path: '/plan/:planId/task/:taskId/update',
     name: 'TaskUpdate',
     meta: { requiresAuth: true },
-    component: () => import(/* webpackChunkName: "about" */ '../components/task/TaskUpdate.vue')
+    component: () => import('../components/task/TaskUpdate.vue')
   },
 
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 

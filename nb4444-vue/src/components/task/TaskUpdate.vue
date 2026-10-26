@@ -2,7 +2,7 @@
   <div>
 
       <v-card>
-        <h2 class="grey lighten-2 text-center">Обновление задачи</h2>
+        <h2 class="bg-grey-lighten-2 text-center">Обновление задачи</h2>
           <v-form
             ref="form"
             @submit.prevent="validForm"
@@ -58,21 +58,21 @@
               <v-spacer></v-spacer>
               <v-btn
                 color="primary"
-                text
+                variant="text"
                 type="submit"
               >
                 Отправить
               </v-btn>
               <v-btn
-                color="danger"
-                text
+                color="error"
+                variant="text"
                 @click="resetForm"
               >
                 Сбросить
               </v-btn>
               <v-btn
                 color="secondary"
-                text
+                variant="text"
                 :to="{ name: 'PlanDetail', params: {planId: this.$route.params.planId} }"
               >
                 Назад
@@ -87,13 +87,11 @@
 <script>
   import header from "../../mixins/header";
   import updateMixin from "../../mixins/updateMixin";
-  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+  import { ClassicEditor, editorConfig } from "@/plugins/ckeditor";
 
   export default {
     name: "TaskUpdate",
     mixins: [header, updateMixin],
-    components: {ClassicEditor},
-
     data () {
       return {
         sections: [],
@@ -113,7 +111,7 @@
         updatePath: '/api/v1/task/',
 
         editor: ClassicEditor,
-        editorConfig: {},
+        editorConfig,
 
       }
     },
