@@ -47,7 +47,6 @@
       return {
         "text": "",
         "image": null,
-        "fileval": null,
 
         editor: ClassicEditor,
         editorConfig,
@@ -56,19 +55,20 @@
     },
     methods: {
 
-      createNotes(e) {
-          if (!this.text && !this.image) {
+      createNotes() {
+          const image = Array.isArray(this.image) ? this.image[0] : this.image;
+          if (!this.text && !image) {
             alert("Форма пуста!");
             return;
           }
           let data;
           let headers = this.getHeaders();
-          if (this.image) {
+          if (image) {
             let formData = new FormData()
             formData.append("text", this.text);
-            formData.append("image",  this.image[0], this.image[0].name);
+            formData.append("image", image, image.name);
             data = formData;
-            headers['Content-Type'] = 'multipart/form-data';
+            delete headers['Content-Type'];
           } else {
             data = {
               "text": this.text,
