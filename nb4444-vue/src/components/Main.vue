@@ -5,31 +5,26 @@
         <v-img
           aspect-ratio="16/9"
           cover
-          src="@/assets/lamborgini.webp"
+          :src="mainImage"
           width="100%"
           class="rounded"
+          alt="Зелёный автомобиль"
         ></v-img>
-<!--        <img class="rounded" src="../../../media/lambaZel.jpg" width="100%" alt="">-->
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+  import mainImage from '@/assets/lamborgini.webp'
+
   export default {
     name: 'Main',
 
     data: function () {
       return {
-
+        mainImage,
       }
     }
   }
 </script>
-
-<style>
-  .actions-btn {
-    display: flex;
-    justify-content: end;
-  }
-</style>
