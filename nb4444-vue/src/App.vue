@@ -1,16 +1,17 @@
 <template>
   <v-app>
-
-    <v-app-bar color="green-accent-3">
+    <v-app-bar class="app-bar" color="green-accent-3">
       <v-app-bar-nav-icon v-if="$store.getters.isAuthenticated" @click="onLeftMenu"></v-app-bar-nav-icon>
-      <v-col
-      class="text-center"
-    >
-      <h1>БЧ</h1>
-    </v-col>
-    <v-col v-if="$store.getters.isAuthenticated" cols="2" class="text-end">
-      <button @click="logout">Выход</button>
-    </v-col>
+      <v-app-bar-title class="text-center">БЧ</v-app-bar-title>
+      <v-btn
+        v-if="$store.getters.isAuthenticated"
+        class="mr-2"
+        variant="outlined"
+        prepend-icon="mdi-logout"
+        @click="logout"
+      >
+        Выход
+      </v-btn>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -29,25 +30,15 @@
         </v-list>
       </v-navigation-drawer>
 
-    <!-- Sizes your content based upon application components -->
-    <v-main class="bg-blue-grey-lighten-5">
-
-      <!-- Provides the application the proper gutter -->
+    <v-main class="app-main bg-blue-grey-lighten-5">
       <v-container fluid>
-
-        <!-- If using vue-router -->
         <router-view></router-view>
       </v-container>
     </v-main>
 
-    <v-footer class="bg-green-accent-4 pa-0">
-    <v-col
-      class="text-center"
-      cols="12"
-    >
-      <strong>© 2021 Andrey Bernyak</strong>
-    </v-col>
-  </v-footer>
+    <v-footer class="app-footer bg-green-accent-4">
+      <strong>© 2021 Andrei Biarniak</strong>
+    </v-footer>
   </v-app>
 </template>
 
@@ -102,10 +93,28 @@ export default {
 </script>
 
 <style>
+.app-bar .v-toolbar__content {
+  width: 100%;
+}
+
+.app-main {
+  flex: 1 0 auto;
+}
+
+.app-footer {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 8px 16px;
+  text-align: center;
+}
+
 .main-content {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  }
+}
 </style>
