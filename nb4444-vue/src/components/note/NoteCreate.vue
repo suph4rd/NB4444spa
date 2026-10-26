@@ -3,7 +3,7 @@
     <v-card :style="{'width': '100%'}">
     <v-form
       ref="form"
-      lazy-validation
+      validate-on="submit lazy"
       :style="{'margin': '15px'}"
       @submit.prevent="createNotes"
     >
@@ -21,8 +21,8 @@
 
     <v-file-input
       label="Файл"
-      outlined
-      dense
+      variant="outlined"
+      density="compact"
       v-model="image"
     ></v-file-input>
 
@@ -38,13 +38,11 @@
 
 <script>
   import header from "../../mixins/header";
-  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+  import { ClassicEditor, editorConfig } from "@/plugins/ckeditor";
 
   export default {
     name: 'NoteCreate',
     mixins: [header],
-    components: {ClassicEditor},
-
     data: function () {
       return {
         "text": "",
@@ -52,7 +50,7 @@
         "fileval": null,
 
         editor: ClassicEditor,
-        editorConfig: {},
+        editorConfig,
 
       }
     },
