@@ -10,14 +10,15 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 
 loadFonts()
 
-let app = createApp(App)
+const app = createApp(App)
+const apiPort = process.env.VUE_APP_API_PORT || '8008'
 
 app.use(router)
 app.use(store)
 app.use(vuetify)
 app.use(VueAxios, axios)
+
 app.use(CKEditor)
-// app.config.globalProperties.$apiHost = `http://${document.location.hostname}:8008` // for dev
-app.config.globalProperties.$apiHost = `http://${document.location.hostname}:9999` // for prod
+app.config.globalProperties.$apiHost = `http://${document.location.hostname}:${apiPort}`
 
 app.mount('#app')

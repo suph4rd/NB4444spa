@@ -12,8 +12,7 @@ If you want to run project in production, you should to do next steps:
 3. If you don't have docker and docker-compose on your system, you should install its
 4. Check availability and openness of ports 90 and 9999 <br> 
 ( If port 90 and 9999 is busy, you can change the port in the docker-compose-prod.yml file <br>
-and change port for app.config.globalProperties.$apiHost <br> 
-in ./nb4444-vue/src/mail.js   )
+and set the corresponding `VUE_APP_API_PORT` for `nb4_vue_prod` in `docker-compose-prod.yml` )
 5. Run file update.sh in console, witch situated in the root of the project
 6. Default superuser credentials:
     - username: admin

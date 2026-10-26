@@ -21,6 +21,8 @@ services:
       dockerfile: prod.Dockerfile
     image: 'nb4444-prod-vue'
     command: sh -c "npm run serve -- --port 90"
+    environment:
+      VUE_APP_API_PORT: 9999
     ports:
       - "90:90"
     restart: always
