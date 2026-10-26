@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    'bootstrap5',
+    'django_bootstrap5',
     'el_pagination',
 
     # apps
@@ -175,8 +175,6 @@ LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'Europe/Minsk'
 
 USE_I18N = True
-
-USE_L10N = True
 
 USE_TZ = True
 
