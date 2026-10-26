@@ -1,4 +1,6 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from B4 import models as b4_models
@@ -37,6 +39,38 @@ class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['id', 'username', 'email', 'is_superuser']
+        read_only_fields = ['is_superuser']
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, trim_whitespace=False)
+    first_name = serializers.CharField(required=True, allow_blank=False)
+    last_name = serializers.CharField(required=True, allow_blank=False)
+    email = serializers.EmailField(required=True)
+
+    class Meta:
+        model = b4_models.User
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email']
+
+    def validate(self, attrs):
+        user = b4_models.User(
+            username=attrs.get('username', ''),
+            first_name=attrs.get('first_name', ''),
+            last_name=attrs.get('last_name', ''),
+            email=attrs.get('email', ''),
+        )
+        try:
+            validate_password(attrs['password'], user=user)
+        except DjangoValidationError as error:
+            raise serializers.ValidationError({'password': error.messages}) from error
+        return attrs
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = b4_models.User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class ListPlanSerializer(serializers.ModelSerializer):
