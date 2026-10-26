@@ -15,35 +15,24 @@
       class="elevation-1"
     >
       <template v-slot:item.actions="{ item }">
-        <div class="actions-btn">
-          <div class="row">
-
-            <v-btn icon :to="{ name: 'PlanDetail', params: {planId: item.id} }">
-                <v-icon
-                class="col"
-                >
-                  mdi-information
-                </v-icon>
-              </v-btn>
-
-            <v-btn icon :to="{ name: 'PlanUpdate', params: {planId: item.id} }">
-              <v-icon
-                class="col"
-                >
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-
-            <div class="col" style="display: inline-block">
-              <Delete
-                @onDelete="getData"
-                :objId="item.id"
-                :deletePath="'/api/v1/plan/'"
-                :titleDelete="'плана'"
-                :messageDelete="'план'" ></Delete>
-            </div>
-
-          </div>
+        <div class="plan-actions">
+          <v-btn
+            icon="mdi-information"
+            aria-label="Подробнее о плане"
+            :to="{ name: 'PlanDetail', params: {planId: item.id} }"
+          ></v-btn>
+          <v-btn
+            icon="mdi-pencil"
+            aria-label="Редактировать план"
+            :to="{ name: 'PlanUpdate', params: {planId: item.id} }"
+          ></v-btn>
+          <Delete
+            @onDelete="getData"
+            :objId="item.id"
+            :deletePath="'/api/v1/plan/'"
+            :titleDelete="'плана'"
+            :messageDelete="'план'"
+          ></Delete>
         </div>
       </template>
     </v-data-table>
@@ -97,3 +86,16 @@ export default {
   },
 }
 </script>
+
+<style>
+.plan-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.plan-actions .v-btn {
+  margin: 0;
+}
+</style>
