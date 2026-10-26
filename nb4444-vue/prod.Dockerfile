@@ -1,20 +1,16 @@
-FROM node:lts-alpine as build-stage
+FROM node:lts-alpine AS build-stage
 
-RUN apk --no-cache add curl
-
-# install simple http server for serving static content
-RUN npm install -g http-server
-
-# make the 'app' folder the current working directory
-RUN mkdir app
-COPY . ./app
 WORKDIR /app
+COPY package*.json ./
+RUN npm ci
 
-# install project dependencies
-RUN npm install
+COPY . .
+ARG VUE_APP_API_PORT=9999
+RUN npm run build
 
-# build app for production with minification
-RUN #npm run build
+FROM nginx:alpine AS production-stage
 
-EXPOSE 90
-CMD [ "http-server", "dist" ]
+COPY nginx.prod.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+EXPOSE 80
