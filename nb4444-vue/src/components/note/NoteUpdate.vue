@@ -18,7 +18,7 @@
 <!--    ></v-textarea>-->
 
     <div class="mb-5">
-      <ckeditor :editor="editor" v-model="object.text" :config="editorConfig"></ckeditor>
+      <NoteEditor v-model="object.text" />
     </div>
 
     <v-checkbox
@@ -80,11 +80,11 @@
 <script>
   import header from "../../mixins/header";
   import Delete from "@/components/common_components/Delete.vue";
-  import { ClassicEditor, editorConfig } from "@/plugins/ckeditor";
+  import NoteEditor from "./NoteEditor.vue";
 
   export default {
     name: 'NoteUpdate',
-    components: {Delete},
+    components: {Delete, NoteEditor},
     mixins: [header],
 
     data: function () {
@@ -97,8 +97,6 @@
           image: null,
         },
 
-        editor: ClassicEditor,
-        editorConfig,
 
       }
     },
