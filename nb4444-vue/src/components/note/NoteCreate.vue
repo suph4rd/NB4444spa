@@ -16,7 +16,7 @@
 <!--    ></v-textarea>-->
 
     <div class="mb-5">
-      <ckeditor :editor="editor" v-model="text" :config="editorConfig"></ckeditor>
+      <NoteEditor v-model="text" />
     </div>
 
     <v-file-input
@@ -38,18 +38,17 @@
 
 <script>
   import header from "../../mixins/header";
-  import { ClassicEditor, editorConfig } from "@/plugins/ckeditor";
+  import NoteEditor from "./NoteEditor.vue";
 
   export default {
     name: 'NoteCreate',
+    components: {NoteEditor},
     mixins: [header],
     data: function () {
       return {
         "text": "",
         "image": null,
 
-        editor: ClassicEditor,
-        editorConfig,
 
       }
     },

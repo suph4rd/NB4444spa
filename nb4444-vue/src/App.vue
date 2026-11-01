@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar class="app-bar" color="green-accent-3">
+    <v-app-bar class="app-bar" color="primary">
       <v-app-bar-nav-icon v-if="$store.getters.isAuthenticated" @click="onLeftMenu"></v-app-bar-nav-icon>
       <v-app-bar-title class="text-center">БЧ</v-app-bar-title>
       <v-btn
@@ -30,13 +30,13 @@
         </v-list>
       </v-navigation-drawer>
 
-    <v-main class="app-main bg-blue-grey-lighten-5">
+    <v-main class="app-main bg-background">
       <v-container fluid>
         <router-view></router-view>
       </v-container>
     </v-main>
 
-    <v-footer class="app-footer bg-green-accent-4">
+    <v-footer class="app-footer bg-primary">
       <strong>© 2021 Andrei Biarniak</strong>
     </v-footer>
   </v-app>
