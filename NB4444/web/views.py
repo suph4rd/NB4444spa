@@ -1,6 +1,3 @@
-import threading
-
-from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
@@ -93,16 +90,6 @@ class NoteUpdateView(LoginRequiredMixin, mixins.IsCurrentUserMixin, mixins.CKEdi
                      mixins.NoteViewMixin, generic.UpdateView):
     template_name = "pages/note/update_note.html"
     redirect_url = reverse_lazy('web:note')
-
-
-@login_required
-def get_bot_info_view(request):
-    from tele_bot import main
-    try:
-        main.receive_records_from_telegram_bot()
-    except Exception as e:
-        messages.error(request, e.args[0])
-    return redirect('web:note')
 
 
 class TaskCreateView(LoginRequiredMixin, mixins.CKEditorErrorShowMixin, CreateView):

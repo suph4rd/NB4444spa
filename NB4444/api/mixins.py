@@ -1,34 +1,31 @@
-import copy
-
 from rest_framework import status
 from rest_framework.response import Response
 
+from .services import QuerysetFilterService
+
 
 class ListFilterMixin:
-    def get_int_value(self, value) -> int:
-        match value:
-            case int(value):
-                return value
-            case str(value) if value.isdigit() :
-                return int(value)
-            case list(value) if len(value) == 1:
-                return self.get_int_value(value[0])
-        raise ValueError({"error": f"{value} is not convent to Integer"})
+    queryset_filter_service_class = QuerysetFilterService
+
+    def get_queryset(self):
+        return self.queryset_filter_service_class().filter_queryset(
+            queryset=super().get_queryset(),
+            user=self.request.user,
+            query_params=self.request.query_params,
+        )
 
     def list(self, request, *args, **kwargs):
-        offset = request.GET.get('offset')
-        limit = request.GET.get('limit')
-        if offset or limit:
-            try:
-                int_offset = self.get_int_value(offset)
-                int_limit = self.get_int_value(limit)
-                if int_offset and int_limit and int_offset >= int_limit:
-                    raise ValueError(f"offset: {offset} больше либо равен limit: {limit}")
-                self.queryset = self.queryset[int_offset: int_limit]
-            except Exception as err:
-                print(err)
-                return Response({"statusText": str(err)}, status=400)
-        return super().list(request, *args, **kwargs)
+        from rest_framework.exceptions import ValidationError
+        qs = self.filter_queryset(self.get_queryset())
+        try:
+            offset = int(request.GET.get('offset', 0))
+            limit = request.GET.get('limit')
+            limit = int(limit) if limit is not None else None
+            if offset < 0 or (limit is not None and limit < offset):
+                raise ValueError()
+        except (ValueError, TypeError):
+            raise ValidationError('Некорректные границы списка')
+        return Response(self.get_serializer(qs[offset:limit], many=True).data)
 
 
 class ListWithUserMixin:
@@ -43,9 +40,7 @@ class CreateWithUserMixin:
     def create(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response({"statusText": "Пользователь не авторизован!"}, status=403)
-        data = copy.deepcopy(request.data)
-        data['user'] = request.user.id
-        serializer = self.get_serializer(data=data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

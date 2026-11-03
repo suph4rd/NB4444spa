@@ -19,7 +19,6 @@ from . import router, views
 
 app_name = 'api'
 urlpatterns = [
-    path('v1/bot-response/', views.get_bot_info_view, name='bot_response'),
     path('v1/section-list/', views.get_section_list_view, name='section_list_view'),
 ]
 

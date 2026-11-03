@@ -106,7 +106,6 @@ urlpatterns = [
         ),
         name='task_delete'
     ),
-    path('bot-response/', views.get_bot_info_view, name='bot_response'),
     path(
         'user-create/',
         generic.CreateView.as_view(

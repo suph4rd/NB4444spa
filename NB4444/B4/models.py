@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -30,7 +30,7 @@ class AbstractSafeModel(models.Model):
         if force:
             return super().delete(using=None, keep_parents=False)
         self.is_delete = True
-        self.delete_datetime = datetime.datetime.now()
+        self.delete_datetime = timezone.now()
         self.save()
 
     class Meta:

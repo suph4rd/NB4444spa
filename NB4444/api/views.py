@@ -1,5 +1,3 @@
-import threading
-
 from rest_framework import status
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
@@ -8,20 +6,17 @@ from rest_framework.viewsets import ModelViewSet
 
 from . import serializers
 from .mixins import CRWithUserMixin, ListFilterMixin
+from .services import (
+    NoteQuerysetFilterService,
+    PlanQuerysetFilterService,
+    TaskQuerysetFilterService,
+)
 from .permissions import IsSuperUserOrOwnerPermission
 from B4 import models as b4_models
 
 
-@api_view(['GET'])
-def get_bot_info_view(request):
-    from tele_bot import main
-    t1 = threading.Thread(target=main.receive_records_from_telegramm_bot)
-    t1.start()
-    return Response(status=status.HTTP_200_OK)
-
-
-class DefaultDeductionListFilterModelViewSet(ListFilterMixin, ModelViewSet):
-    queryset = b4_models.DefaultDeductions.objects.all()
+class DefaultDeductionListFilterModelViewSet(ListFilterMixin, CRWithUserMixin, ModelViewSet):
+    queryset = b4_models.DefaultDeductions.objects.order_by('id')
     serializer_class = serializers.get_model_serializer_class(
         b4_models.DefaultDeductions,
         local_exclude=['created_at', 'updated_at', 'delete_datetime', 'is_delete']
@@ -30,7 +25,7 @@ class DefaultDeductionListFilterModelViewSet(ListFilterMixin, ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def last(self, request, *args, **kwargs):
-        qs = self.queryset.last()
+        qs = self.get_queryset().last()
         serializer = self.serializer_class(qs)
         return Response(serializer.data)
 
@@ -46,6 +41,7 @@ class DefaultDeductionListFilterModelViewSet(ListFilterMixin, ModelViewSet):
 
 
 class PlanModelListFilterModelViewSet(ListFilterMixin, CRWithUserMixin, ModelViewSet):
+    queryset_filter_service_class = PlanQuerysetFilterService
     model = b4_models.Plan
     queryset = model.objects.all()
     serializer_class = serializers.get_model_serializer_class(
@@ -64,6 +60,7 @@ class PlanModelListFilterModelViewSet(ListFilterMixin, CRWithUserMixin, ModelVie
 
 
 class TaskModelListFilterModelViewSet(ListFilterMixin, ModelViewSet):
+    queryset_filter_service_class = TaskQuerysetFilterService
     model = b4_models.Task
     queryset = model.objects.all()
     serializer_class = serializers.get_model_serializer_class(
@@ -82,6 +79,7 @@ class TaskModelListFilterModelViewSet(ListFilterMixin, ModelViewSet):
 
 
 class NoteModelListFilterModelViewSet(ListFilterMixin, CRWithUserMixin, ModelViewSet):
+    queryset_filter_service_class = NoteQuerysetFilterService
     model = b4_models.Note
     queryset = model.objects.all()
     permission_classes = [IsSuperUserOrOwnerPermission]
@@ -89,6 +87,17 @@ class NoteModelListFilterModelViewSet(ListFilterMixin, CRWithUserMixin, ModelVie
         b4_models.Note,
         local_exclude=['created_at', 'updated_at', 'delete_datetime', 'is_delete']
     )
+
+    @action(methods=['get'], detail=True)
+    def image(self, request, *args, **kwargs):
+        from django.http import FileResponse, Http404
+        obj = self.get_object()
+        if not obj.image:
+            raise Http404
+        try:
+            return FileResponse(obj.image.open('rb'))
+        except FileNotFoundError:
+            raise Http404 from None
 
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = serializers.ListNoteSerializer

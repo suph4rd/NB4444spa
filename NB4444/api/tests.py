@@ -4,6 +4,29 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 
+class TaskFilterTests(APITestCase):
+    def setUp(self):
+        user = get_user_model().objects.create_user(username='task-filter-user')
+        self.client.force_authenticate(user=user)
+        self.url = reverse('api:task-list')
+
+    def test_numeric_filters_reject_invalid_values(self):
+        for key in ('plan', 'section', 'priority'):
+            for value in ('abc', '', '1.5'):
+                with self.subTest(key=key, value=value):
+                    response = self.client.get(self.url, {key: value})
+
+                    self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+                    self.assertIn(key, response.data)
+
+    def test_numeric_filters_accept_integers(self):
+        for key in ('plan', 'section', 'priority'):
+            with self.subTest(key=key):
+                response = self.client.get(self.url, {key: '1'})
+
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class UserRegistrationTests(APITestCase):
     def setUp(self):
         self.url = reverse('api:user-list')

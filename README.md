@@ -6,9 +6,9 @@ An application for keeping personal notes and recording facts about your life. T
 
 - `NB4444/` — Django application, API, templates, database, and user-uploaded media.
 - `nb4444-vue/` — Vue 3 frontend built with Vite.
-- `docker-compose.yml` — local frontend and backend setup.
-- `docker-compose-test.yml` — backend test setup.
-- `docker-compose-prod.yml` — deployment configuration.
+- `docker/docker-compose.yml` — local frontend and backend setup.
+- `docker/docker-compose-test.yml` — backend test setup.
+- `docker/docker-compose-prod.yml` — deployment configuration.
 
 ## Local development
 
@@ -26,7 +26,7 @@ Once the services start:
 Backend database migrations are applied automatically at startup. The script runs development containers in the separate `nb4444-dev` Compose project, so starting them does not stop or replace production containers. To stop and remove only the development containers, run:
 
 ```sh
-docker compose -p nb4444-dev -f docker-compose.yml down
+docker compose -p nb4444-dev -f docker/docker-compose.yml down
 ```
 
 ### Compose projects and PyCharm
@@ -38,7 +38,7 @@ for each project: `nb4444-dev_default`, `nb4444-test_default`, and
 `nb4444spa_default`.
 
 In the PyCharm Docker Compose run configuration, select **only**
-`docker-compose.yml` and set **Project name** to `nb4444-dev`. An explicit IDE
+`docker/docker-compose.yml` and set **Project name** to `nb4444-dev`. An explicit IDE
 project name (like the CLI `-p` option) takes precedence over the file's `name:`.
 For direct CLI commands without `-p`, `COMPOSE_PROJECT_NAME` also overrides
 `name:`; keep it unset or aligned with the intended environment.
@@ -85,7 +85,7 @@ npm run serve -- --port 8080
 By default, the frontend connects to the API on port `8008`. For a production frontend build, the API port is set with the Docker build argument `VITE_API_PORT`; the default is `9999`. If the API is available on a different port, set it when building, for example:
 
 ```sh
-VITE_API_PORT=10000 docker compose -p nb4444spa -f docker-compose-prod.yml up -d --build
+VITE_API_PORT=10000 docker compose -p nb4444spa -f docker/docker-compose-prod.yml up -d --build
 ```
 
 The value is embedded in the frontend during the build, so rebuild the frontend after changing it.
@@ -95,7 +95,7 @@ The value is embedded in the frontend during the build, so rebuild the frontend 
 To run the backend tests with Docker:
 
 ```sh
-docker compose -p nb4444-test -f docker-compose-test.yml up --build --remove-orphans
+docker compose -p nb4444-test -f docker/docker-compose-test.yml up --build --remove-orphans
 ```
 
 Or run them locally from the `NB4444/` directory:
@@ -114,7 +114,7 @@ Git, Docker, and Docker Compose must be installed on the server. From the reposi
 ./start-prod.sh
 ```
 
-The script starts the production containers and removes dangling Docker images. The frontend is available on port `90`, and the API on port `9999`. To change the frontend's external port, edit the host-side port in the corresponding `ports` mapping in `docker-compose-prod.yml`. If you change the API's external port, update the host-side port mapping and set the same port in `VITE_API_PORT` when rebuilding the frontend.
+The script starts the production containers and removes dangling Docker images. The frontend is available on port `90`, and the API on port `9999`. To change the frontend's external port, edit the host-side port in the corresponding `ports` mapping in `docker/docker-compose-prod.yml`. If you change the API's external port, update the host-side port mapping and set the same port in `VITE_API_PORT` when rebuilding the frontend.
 
 The `update-prod.sh` script pulls changes with `git pull`, rebuilds and restarts the containers, and then runs `docker image prune -f`. Before running it, make sure your local changes are saved and be aware that pruning affects dangling images across the entire Docker host.
 
@@ -123,7 +123,7 @@ The `update-prod.sh` script pulls changes with `git pull`, rebuilds and restarts
 The first database migration creates an administrator account with a fixed initial password. Change this password before making the application publicly available. From the repository root, run:
 
 ```sh
-docker compose -p nb4444spa -f docker-compose-prod.yml exec nb4_api_prod python manage.py changepassword admin
+docker compose -p nb4444spa -f docker/docker-compose-prod.yml exec nb4_api_prod python manage.py changepassword admin
 ```
 
 ## Backup and recovery
@@ -139,3 +139,17 @@ Create a consistent database backup while the backend is stopped, or use an appr
 
 - `SECRET_KEY` can be provided through an environment variable; do not use the default value in production.
 - `NB4444/NB4444/local_settings.py` is intended for local overrides and is excluded from Git. Do not put secrets in the repository, and do not rely on this file as a secure way to configure the production container.
+
+## MCP
+
+The project includes an MCP (Model Context Protocol) server that lets AI clients work with notes, plans, tasks, deductions, and images through the application's REST API. The server uses JWT for authentication and stdio for client communication; MCP does not require a separate HTTP port.
+
+You can connect MCP to Codex using the [connect_nb4444_mcp](.agents/skills/connect_nb4444_mcp/SKILL.md) skill. For example, ask Codex:
+
+```text
+Use $connect_nb4444_mcp to connect the NB4444 MCP server for dev.
+```
+
+The skill helps prepare Docker and environment settings, register the server in the Codex configuration, and verify the connection using `get_current_user`. It defaults to dev; explicitly request production to connect to that environment. Connecting requires Docker to be running and JWT tokens for a user in the selected environment.
+
+See the [MCP documentation](mcp_server/README.md) for manual connection instructions, dev and production setup, and the list of tools.

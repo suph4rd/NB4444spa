@@ -1,0 +1,10 @@
+# Reconnect an existing Codex MCP integration
+
+Use only when reconnection is requested. Do not start a second daemon or stop existing containers.
+
+1. Inspect `codex app-server proxy --help`, `codex app-server daemon version`, and the installed CLI version. Generate the protocol schema in a temporary directory using `codex app-server generate-json-schema --experimental --out ...`. Check for `config/mcpServer/reload` and its parameter schema. CLI schema support alone does not establish running-server support. Never print unrelated configuration or credentials from diagnostic output.
+2. Obtain the existing control socket from daemon version output. Use `codex app-server proxy --sock SOCKET` only if supported and the existing socket is available. Proxy handles transport; do not implement a WebSocket client manually. If unavailable or incompatible, explain the limitation and ask the user to restart Codex. Never restart it automatically.
+3. Exchange newline-delimited JSON through the proxy. Send `{"id":1,"method":"initialize","params":{"clientInfo":{"name":"nb4444_mcp_reconnect","version":"1.0"}}}`. Wait for the matching successful response; if the running version advertises a different required initialize schema, follow that schema. Then send `{"method":"initialized"}`, followed by `{"id":2,"method":"config/mcpServer/reload","params":null}`.
+4. Match responses by ID and ignore intervening notifications. An error response, malformed response, closed connection, or unsupported method is a failed reload; report it without claiming success. Version mismatch requires checking compatibility through the actual responses rather than assuming CLI support applies to the daemon.
+5. Bound each connection/response wait to 10 seconds and the entire exchange to 30 seconds. On completion or failure, terminate only the proxy process created for this check. Do not touch the daemon or its MCP containers.
+6. A successful reload response only confirms acceptance. Report fresh-container smoke results separately. Check the next turn's available tools and get_current_user before confirming a refreshed current-thread connection.

@@ -1,0 +1,45 @@
+name: nb4444spa
+
+services:
+  mcp:
+    profiles: ["mcp"]
+    build:
+      context: ../mcp_server
+    image: nb4444-prod-mcp
+    stdin_open: true
+    environment:
+      NB4444_API_URL: ${NB4444_API_URL:-http://nb4-api-prod:9999}
+      NB4444_ACCESS_TOKEN: ${NB4444_ACCESS_TOKEN:-}
+      NB4444_REFRESH_TOKEN: ${NB4444_REFRESH_TOKEN:-}
+      NB4444_UPLOAD_ROOT: /uploads
+      NB4444_HTTP_TIMEOUT: ${NB4444_HTTP_TIMEOUT:-30}
+    volumes:
+      - ${NB4444_UPLOAD_DIR:-../mcp_server/uploads}:/uploads:ro
+
+  nb4_api_prod:
+    build:
+      context: ../NB4444
+      dockerfile: prod.Dockerfile
+    image: 'nb4444-prod-api'
+    networks:
+      default:
+        aliases:
+          - nb4-api-prod
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:9999"
+    volumes:
+      - ../NB4444/db:/NB4444/db
+      - ../NB4444/media/foto:/NB4444/media/foto
+    ports:
+      - "9999:9999"
+    restart: always
+
+  nb4_vue_prod:
+    build:
+      context: ../nb4444-vue
+      dockerfile: prod.Dockerfile
+      args:
+        VITE_API_PORT: ${VITE_API_PORT:-9999}
+    image: 'nb4444-prod-vue'
+    ports:
+      - "90:80"
+    restart: always

@@ -75,15 +75,6 @@ export default {
     onLeftMenu(){
       this.leftMenu = !this.leftMenu
     },
-    updateBotMessages(){
-      this.axios.get(`${this.$apiHost}/api/v1/bot-response/`).then((result) =>{
-        if (result.status === 200) {
-          alert("Запрос на подгрузку записей успешно получен!")
-        } else {
-          alert("Ошибка отправки запроса!")
-        }
-      })
-    },
     logout() {
       this.$store.commit('clearUser')
       this.$router.replace({ name: 'Login' })
