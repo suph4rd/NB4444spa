@@ -5,12 +5,12 @@ Use russian language
 
 ## Project Structure & Module Organization
 
-This repository contains a Django backend and a Vue frontend. Backend code lives in `NB4444/`: settings in `NB4444/NB4444/`, models and admin code in `B4/`, API code in `api/`, web views in `web/`, templates in `templates/`, and media under `media/`. Frontend code lives in `nb4444-vue/`, with components in `src/components/`, routing in `src/router/`, state in `src/store/`, plugins in `src/plugins/`, and assets in `src/assets/`. Docker Compose files and deployment scripts are at the repository root.
+This repository contains a Django backend and a Vue frontend. Backend code lives in `NB4444/`: settings in `NB4444/NB4444/`, models and admin code in `B4/`, API code in `api/`, web views in `web/`, templates in `templates/`, and media under `media/`. Frontend code lives in `nb4444-vue/`, with components in `src/components/`, routing in `src/router/`, state in `src/store/`, plugins in `src/plugins/`, and assets in `src/assets/`. Docker Compose files live in `docker/`; deployment scripts are at the repository root.
 
 ## Build, Test, and Development Commands
 
-- `docker compose up --build`: starts the local Django API on port `8008` and Vue dev server on port `8080`.
-- `docker compose -f docker-compose-test.yml up --build`: builds the backend test image and runs Django tests.
+- `docker compose -f docker/docker-compose.yml up --build`: starts the local Django API on port `8008` and Vue dev server on port `8080`.
+- `docker compose -f docker/docker-compose-test.yml up --build`: builds the backend test image and runs Django tests.
 - `cd NB4444 && python manage.py migrate`: applies backend database migrations.
 - `cd NB4444 && python manage.py runserver 0.0.0.0:8008`: runs the backend locally.
 - `cd nb4444-vue && npm install`: installs frontend dependencies.

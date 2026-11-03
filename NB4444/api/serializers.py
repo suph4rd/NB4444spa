@@ -25,6 +25,21 @@ def get_model_serializer_class(
     """
 
     class CustomModelSerializer(serializers.ModelSerializer):
+        def validate(self, attrs):
+            request = self.context.get('request')
+            attrs.pop('user', None)
+            if request and local_models in (b4_models.Note, b4_models.Plan, b4_models.DefaultDeductions):
+                if self.instance is None:
+                    attrs['user'] = request.user
+            if local_models == b4_models.Task:
+                plan = attrs.get('plan', getattr(self.instance, 'plan', None))
+                if plan and (plan.is_delete or (request and not request.user.is_superuser and plan.user_id != request.user.id)):
+                    raise serializers.ValidationError({'plan': 'План недоступен'})
+                section = attrs.get('section')
+                if section and not section.is_active:
+                    raise serializers.ValidationError({'section': 'Раздел неактивен'})
+            return attrs
+
         class Meta:
             model = local_models
             if local_exclude:
@@ -32,6 +47,7 @@ def get_model_serializer_class(
             else:
                 fields = local_fields
             depth = local_depth
+            extra_kwargs = {"user": {"required": False}}
     return CustomModelSerializer
 
 
