@@ -145,3 +145,7 @@ This script overrides database/media settings with temporary paths, starts a loc
 HTTP server, and runs CRUD plus image tools through a real stdio MCP session.
 It does not connect to the configured dev or production API.
 Write tool schemas document allowed fields; unknown fields are rejected.
+
+## Environment-safe launcher
+
+Use `python3 /absolute/project/mcp_server/launch.py --env prod` (or `--env dev`) as the MCP command in Codex or Desktop. Without `--env`, only the single configured environment is selected. Both configured or neither configured causes an error. Name connections distinctly: NB4444 dev / NB4444 prod. In prod request `list_notes` with `offset=0, page_size=10` for the ten newest posts.

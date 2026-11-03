@@ -11,7 +11,7 @@ Respond in Russian. Complete the available connection steps when the user asks t
 
 Determine the project root from the actual path of this `SKILL.md`, obtained when loading the skill. The file is located at `<root>/.agents/skills/connect_nb4444_mcp/SKILL.md`; in Python, calculate the root as `Path(skill_file).resolve().parents[3]` (`Path` from `pathlib`). Do not use the current working directory or a hardcoded absolute path. Check that `mcp_server/README.md` and `docker/` exist in the identified root; if the structure does not match, locate the checkout. Calculate absolute paths only for local commands and the Codex configuration; do not write them to the repository.
 
-Use the environment specified in the request; default to dev if none is specified. Connect production only when explicitly requested. If both environments are requested, configure and verify each separately. Read the current `mcp_server/README.md`, the selected Compose file, and the environment template: they define the services and settings.
+Use the environment specified in the request. Otherwise run the checkout-local mcp_server/launch.py environment selection: choose the only env file with configured API URL and non-placeholder JWTs. If both or neither are configured, require explicit selection; never default to dev. Production may be selected automatically when it is the only configured environment. If both environments are requested, configure and verify each separately. Read the current `mcp_server/README.md`, the selected Compose file, and the environment template: they define the services and settings.
 
 | Parameter | dev | prod |
 | --- | --- | --- |
@@ -115,3 +115,7 @@ The script is supplied over stdin because it is deliberately absent from the ima
 For `authentication_required`, suggest updating JWTs in the selected environment file and restarting the MCP client; for a network error, check Docker, the running API, and `NB4444_API_URL`. Rebuild the image for the selected environment after changing MCP code. Do not write to application data to test the connection.
 
 At the end, state the environment, the local configuration path, what was configured and verified, and any remaining user actions if needed.
+
+## Unified launcher
+
+Register command `python3` with args `[ABSOLUTE_PROJECT_ROOT/mcp_server/launch.py, --env, SELECTED_MODE]`. Use the actual interpreter path if needed. Both Codex and Desktop integrations must use this launcher. Label connections NB4444 dev and NB4444 prod distinctly; retain existing dev registration compatibility. Never silently fall back between environments. Diagnostics go to stderr, keeping stdout for MCP.
