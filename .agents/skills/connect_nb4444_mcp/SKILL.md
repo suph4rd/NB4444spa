@@ -71,28 +71,11 @@ In the user's `${CODEX_HOME:-$HOME/.codex}/config.toml`, add or update only the 
 
 ```toml
 [mcp_servers.SERVER_NAME]
-command = "env"
-args = [
-  "-u", "NB4444_API_URL",
-  "-u", "NB4444_ACCESS_TOKEN",
-  "-u", "NB4444_REFRESH_TOKEN",
-  "-u", "NB4444_HTTP_TIMEOUT",
-  "-u", "NB4444_UPLOAD_DIR",
-  "docker",
-  "compose",
-  "-f",
-  "ABSOLUTE_COMPOSE_FILE",
-  "--env-file",
-  "ABSOLUTE_ENV_FILE",
-  "run",
-  "--rm",
-  "--no-deps",
-  "-T",
-  "mcp"
-]
+command = "python3"
+args = ["ABSOLUTE_PROJECT_ROOT/mcp_server/launch.py", "--env", "SELECTED_MODE"]
 ```
 
-Tokens are passed from the selected environment file through Compose. MCP does not need a separate HTTP port: the server uses stdio, and Codex starts its own container. `-T` disables the terminal, and `--no-deps` assumes that the API is already running. Do not start MCP as a persistent service with `up`.
+Tokens are passed from the selected environment file through Compose. MCP does not need a separate HTTP port: the server uses stdio, and Codex reuses the environment container. `-T` disables the terminal, and `--no-deps` assumes that the API is already running. Use a persistent MCP service with sleep infinity; the launcher prepares it with up --no-deps and opens independent sessions with exec -T.
 
 ## Verification and result
 
@@ -106,7 +89,7 @@ Verify the new image independently through a fresh configured container. Apply t
 
 ```sh
 docker compose -f "$COMPOSE_FILE" --env-file "$ENV_FILE" \
-  run --rm --no-deps -T mcp python - \
+  exec -T mcp python - \
   < "$PROJECT_ROOT/mcp_server/smoke_check.py"
 ```
 
