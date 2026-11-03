@@ -20,12 +20,12 @@ Add the following to `~/.codex/config.toml` (replace `/absolute/project` with th
 
 ```toml
 [mcp_servers.nb4444]
-command = "docker"
-args = ["compose", "-f", "/absolute/project/docker/docker-compose.yml", "--env-file", "/absolute/project/mcp_server/.env", "run", "--rm", "--no-deps", "-T", "mcp"]
+command = "python3"
+args = ["/absolute/project/mcp_server/launch.py", "--env", "dev"]
 ```
 
 Open a new agent session and ask: “Call get_current_user through the nb4444 MCP server.”
-Docker must be running. Each client starts its own MCP container;
+Docker must be running. Clients reuse one persistent MCP container per environment;
 `-T` keeps the stdio protocol running without a terminal. The service with the `mcp` profile does not start
 with a regular `docker compose -f docker/docker-compose.yml up`. It does not need a separate HTTP port.
 
@@ -58,8 +58,8 @@ Use the production Compose file and environment file in the Codex configuration:
 
 ```toml
 [mcp_servers.nb4444_prod]
-command = "docker"
-args = ["compose", "-f", "/absolute/project/docker/docker-compose-prod.yml", "--env-file", "/absolute/project/mcp_server/.env.prod", "run", "--rm", "--no-deps", "-T", "mcp"]
+command = "python3"
+args = ["/absolute/project/mcp_server/launch.py", "--env", "prod"]
 ```
 
 This command assumes that the agent and Docker run on the production machine.
@@ -149,3 +149,7 @@ Write tool schemas document allowed fields; unknown fields are rejected.
 ## Environment-safe launcher
 
 Use `python3 /absolute/project/mcp_server/launch.py --env prod` (or `--env dev`) as the MCP command in Codex or Desktop. Without `--env`, only the single configured environment is selected. Both configured or neither configured causes an error. Name connections distinctly: NB4444 dev / NB4444 prod. In prod request `list_notes` with `offset=0, page_size=10` for the ten newest posts.
+
+## Persistent containers
+
+The launcher runs compose up -d --no-deps mcp under a process lock, then exec -T mcp python /app/server.py. Each client has its own stdio process. Disconnecting leaves the container running. Configuration or image changes may recreate it on the next launch; reconnect clients afterwards. Checks must use compose exec -T mcp python - instead of compose run.

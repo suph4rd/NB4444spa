@@ -6,6 +6,7 @@ services:
     build:
       context: ../mcp_server
     image: nb4444-prod-mcp
+    command: ["sleep", "infinity"]
     stdin_open: true
     environment:
       NB4444_API_URL: ${NB4444_API_URL:-http://nb4-api-prod:9999}

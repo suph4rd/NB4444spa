@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 import argparse
+import fcntl
+import hashlib
+import tempfile
 import os
 from pathlib import Path
 import subprocess
@@ -40,8 +43,20 @@ def main():
     compose = ROOT / 'docker' / ('docker-compose-prod.yml' if mode == 'prod' else 'docker-compose.yml')
     env = {key: value for key, value in os.environ.items() if key not in KEYS}
     print(f'NB4444 MCP: {mode}', file=sys.stderr)
-    return subprocess.call(['docker', 'compose', '-f', str(compose), '--env-file',
-                            str(paths[mode]), 'run', '--rm', '--no-deps', '-T', 'mcp'], env=env)
+    command = ['docker', 'compose', '-f', str(compose), '--env-file',
+               str(paths[mode])]
+    lock_id = hashlib.sha256(str(compose).encode()).hexdigest()
+    lock_path = Path(tempfile.gettempdir()) / f'nb4444-mcp-{lock_id}.lock'
+    with lock_path.open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        result = subprocess.call(
+            command + ['up', '-d', '--no-deps', 'mcp'],
+            env=env, stdout=sys.stderr)
+        if result:
+            return result
+    os.execvpe('docker', command + [
+        'exec', '-T', 'mcp', 'python', '/app/server.py'], env)
+
 
 
 if __name__ == '__main__':
