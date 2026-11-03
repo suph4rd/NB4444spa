@@ -2,3 +2,9 @@
 !Dockerfile
 !requirements.txt
 !server.py
+!nb4444_mcp/
+!nb4444_mcp/*.py
+!nb4444_mcp/tools/
+!nb4444_mcp/tools/*.py
+!nb4444_mcp/launcher/
+!nb4444_mcp/launcher/*.py

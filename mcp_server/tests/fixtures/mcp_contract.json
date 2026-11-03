@@ -1,0 +1,1061 @@
+{
+  "tools": [
+    {
+      "name": "list_notes",
+      "title": null,
+      "description": "list notes. Поля data: text, image. Списки: offset/page_size (1–100), search. Фильтр: has_image. Для загрузки фото используйте set_note_image.",
+      "inputSchema": {
+        "properties": {
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 20,
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "search": {
+            "default": "",
+            "title": "Search",
+            "type": "string"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Plan"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Section"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Priority"
+          },
+          "is_ready": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Ready"
+          },
+          "has_image": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Has Image"
+          }
+        },
+        "title": "listingArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_note",
+      "title": null,
+      "description": "get notes. Поля data: text, image. Списки: offset/page_size (1–100), search. Фильтр: has_image. Для загрузки фото используйте set_note_image.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "getArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "create_note",
+      "title": null,
+      "description": "create notes. Поля data: text, image. Списки: offset/page_size (1–100), search. Фильтр: has_image. Для загрузки фото используйте set_note_image.",
+      "inputSchema": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "image": {
+                "type": "null"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "createArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "update_note",
+      "title": null,
+      "description": "update notes. Поля data: text, image. Списки: offset/page_size (1–100), search. Фильтр: has_image. Для загрузки фото используйте set_note_image.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "image": {
+                "type": "null"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ],
+        "title": "updateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "delete_note",
+      "title": null,
+      "description": "delete notes. Поля data: text, image. Списки: offset/page_size (1–100), search. Фильтр: has_image. Для загрузки фото используйте set_note_image.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "deleteArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "list_plans",
+      "title": null,
+      "description": "list plans. Поля data: name. Списки: offset/page_size (1–100), search. ",
+      "inputSchema": {
+        "properties": {
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 20,
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "search": {
+            "default": "",
+            "title": "Search",
+            "type": "string"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Plan"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Section"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Priority"
+          },
+          "is_ready": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Ready"
+          },
+          "has_image": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Has Image"
+          }
+        },
+        "title": "listingArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_plan",
+      "title": null,
+      "description": "get plans. Поля data: name. Списки: offset/page_size (1–100), search. ",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "getArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "create_plan",
+      "title": null,
+      "description": "create plans. Поля data: name. Списки: offset/page_size (1–100), search. ",
+      "inputSchema": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "createArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "update_plan",
+      "title": null,
+      "description": "update plans. Поля data: name. Списки: offset/page_size (1–100), search. ",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ],
+        "title": "updateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "delete_plan",
+      "title": null,
+      "description": "delete plans. Поля data: name. Списки: offset/page_size (1–100), search. ",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "deleteArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "list_tasks",
+      "title": null,
+      "description": "list tasks. Поля data: plan, section, description, is_ready, priority. Списки: offset/page_size (1–100), search. Фильтры: plan, section, priority (0–3), is_ready.",
+      "inputSchema": {
+        "properties": {
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 20,
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "search": {
+            "default": "",
+            "title": "Search",
+            "type": "string"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Plan"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Section"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Priority"
+          },
+          "is_ready": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Ready"
+          },
+          "has_image": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Has Image"
+          }
+        },
+        "title": "listingArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_task",
+      "title": null,
+      "description": "get tasks. Поля data: plan, section, description, is_ready, priority. Списки: offset/page_size (1–100), search. Фильтры: plan, section, priority (0–3), is_ready.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "getArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "create_task",
+      "title": null,
+      "description": "create tasks. Поля data: plan, section, description, is_ready, priority. Списки: offset/page_size (1–100), search. Фильтры: plan, section, priority (0–3), is_ready.",
+      "inputSchema": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "plan": {
+                "type": "integer"
+              },
+              "section": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "is_ready": {
+                "type": "boolean"
+              },
+              "priority": {
+                "maximum": 3,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "createArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "update_task",
+      "title": null,
+      "description": "update tasks. Поля data: plan, section, description, is_ready, priority. Списки: offset/page_size (1–100), search. Фильтры: plan, section, priority (0–3), is_ready.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "plan": {
+                "type": "integer"
+              },
+              "section": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "is_ready": {
+                "type": "boolean"
+              },
+              "priority": {
+                "maximum": 3,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ],
+        "title": "updateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "delete_task",
+      "title": null,
+      "description": "delete tasks. Поля data: plan, section, description, is_ready, priority. Списки: offset/page_size (1–100), search. Фильтры: plan, section, priority (0–3), is_ready.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "deleteArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "list_deductions",
+      "title": null,
+      "description": "list deductions. Поля data: house, travel, phone, food. Списки: offset/page_size (1–100), search. Денежные значения: десятичные строки. Поиск не поддерживается.",
+      "inputSchema": {
+        "properties": {
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 20,
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "search": {
+            "default": "",
+            "title": "Search",
+            "type": "string"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Plan"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Section"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Priority"
+          },
+          "is_ready": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Ready"
+          },
+          "has_image": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Has Image"
+          }
+        },
+        "title": "listingArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_deduction",
+      "title": null,
+      "description": "get deductions. Поля data: house, travel, phone, food. Списки: offset/page_size (1–100), search. Денежные значения: десятичные строки. Поиск не поддерживается.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "getArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "create_deduction",
+      "title": null,
+      "description": "create deductions. Поля data: house, travel, phone, food. Списки: offset/page_size (1–100), search. Денежные значения: десятичные строки. Поиск не поддерживается.",
+      "inputSchema": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "house": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              },
+              "travel": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              },
+              "phone": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              },
+              "food": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "createArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "update_deduction",
+      "title": null,
+      "description": "update deductions. Поля data: house, travel, phone, food. Списки: offset/page_size (1–100), search. Денежные значения: десятичные строки. Поиск не поддерживается.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "house": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              },
+              "travel": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              },
+              "phone": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              },
+              "food": {
+                "description": "Десятичная денежная сумма",
+                "type": "string"
+              }
+            },
+            "title": "Data",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "data"
+        ],
+        "title": "updateArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "delete_deduction",
+      "title": null,
+      "description": "delete deductions. Поля data: house, travel, phone, food. Списки: offset/page_size (1–100), search. Денежные значения: десятичные строки. Поиск не поддерживается.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "deleteArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_current_user",
+      "title": null,
+      "description": "Текущий авторизованный пользователь: id и username.",
+      "inputSchema": {
+        "properties": {},
+        "title": "get_current_userArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "list_sections",
+      "title": null,
+      "description": "Доступные активные разделы: id и name.",
+      "inputSchema": {
+        "properties": {},
+        "title": "list_sectionsArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_latest_deductions",
+      "title": null,
+      "description": "Последние вычеты текущего пользователя; 404, если отсутствуют.",
+      "inputSchema": {
+        "properties": {},
+        "title": "get_latest_deductionsArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "set_note_image",
+      "title": null,
+      "description": "Загрузить JPEG/PNG/WebP до 10 МиБ из NB4444_UPLOAD_ROOT в заметку.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "path"
+        ],
+        "title": "set_note_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "remove_note_image",
+      "title": null,
+      "description": "Удалить связь заметки с фотографией.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "remove_note_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_note_image",
+      "title": null,
+      "description": "Получить фотографию доступной заметки, максимум 10 МиБ.",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "title": "get_note_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "get_random_notes_with_images",
+      "title": null,
+      "description": "Случайные уникальные доступные заметки с фотографиями; count от 1 до 100.",
+      "inputSchema": {
+        "properties": {
+          "count": {
+            "default": 10,
+            "title": "Count",
+            "type": "integer"
+          }
+        },
+        "title": "get_random_notes_with_imagesArguments",
+        "type": "object"
+      },
+      "outputSchema": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    }
+  ],
+  "resources": [
+    {
+      "name": "guide",
+      "title": null,
+      "uri": "nb4444://guide",
+      "description": "",
+      "mimeType": "text/plain",
+      "size": null,
+      "icons": null,
+      "annotations": null,
+      "meta": null
+    }
+  ],
+  "prompts": [
+    {
+      "name": "review_plan",
+      "title": null,
+      "description": "",
+      "arguments": [
+        {
+          "name": "plan_id",
+          "description": null,
+          "required": true
+        }
+      ],
+      "icons": null,
+      "meta": null
+    },
+    {
+      "name": "summarize_notes",
+      "title": null,
+      "description": "",
+      "arguments": [
+        {
+          "name": "search",
+          "description": null,
+          "required": false
+        }
+      ],
+      "icons": null,
+      "meta": null
+    }
+  ]
+}

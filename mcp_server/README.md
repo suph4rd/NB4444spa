@@ -5,7 +5,7 @@
 From the project root:
 
 ```sh
-cp mcp_server/.env.example mcp_server/.env
+cp mcp_server/env/.env.example mcp_server/env/.env
 docker compose -f docker/docker-compose.yml up -d nb4_api_dev
 docker compose -f docker/docker-compose.yml --profile mcp build mcp
 ```
@@ -13,7 +13,7 @@ docker compose -f docker/docker-compose.yml --profile mcp build mcp
 Obtain JWT tokens via `POST http://localhost:8008/auth/jwt/create/`
 with the JSON body `{"username":"your username","password":"your password"}`.
 Save the response fields `access` and `refresh` as `NB4444_ACCESS_TOKEN` and
-`NB4444_REFRESH_TOKEN` in `mcp_server/.env`. This file is excluded from Git
+`NB4444_REFRESH_TOKEN` in `mcp_server/env/.env`. This file is excluded from Git
 and the Docker build context.
 
 Add the following to `~/.codex/config.toml` (replace `/absolute/project` with the project path):
@@ -44,14 +44,14 @@ Restart the MCP client after changing tokens; rebuild the image after changing c
 On the machine running the production application, from the project root:
 
 ```sh
-cp mcp_server/.env.prod.example mcp_server/.env.prod
+cp mcp_server/env/.env.prod.example mcp_server/env/.env.prod
 docker compose -f docker/docker-compose-prod.yml up -d nb4_api_prod
 docker compose -f docker/docker-compose-prod.yml --profile mcp build mcp
 ```
 
 Obtain JWT tokens for a production user via `/auth/jwt/create/` on the production API
 (`http://localhost:9999/auth/jwt/create/` for local access).
-Save the tokens in `mcp_server/.env.prod`, which is excluded from Git.
+Save the tokens in `mcp_server/env/.env.prod`, which is excluded from Git.
 Use separate environment files for dev and production: their API URLs differ.
 
 Use the production Compose file and environment file in the Codex configuration:
@@ -128,7 +128,7 @@ Run integration tests against a separate test database.
 ## Regression checks
 
 Run MCP unit tests with the installed requirements:
-`cd mcp_server && python -m unittest -v test_server`.
+`cd mcp_server && python -m unittest -v tests.test_server`.
 Backend contract tests: `cd NB4444 && python manage.py test -v 2`.
 Tests use a separate database and temporary media files.
 
@@ -140,7 +140,7 @@ Downloads enforce the 10 MiB limit while streaming and verify image contents.
 After rebuilding MCP, reconnect the client to use the new tools.
 
 Full protocol/HTTP integration check (requires backend and MCP requirements):
-`python mcp_server/integration_check.py` from the repository root.
+`python mcp_server/scripts/integration_check.py` from the repository root.
 This script overrides database/media settings with temporary paths, starts a local
 HTTP server, and runs CRUD plus image tools through a real stdio MCP session.
 It does not connect to the configured dev or production API.
@@ -153,3 +153,51 @@ Use `python3 /absolute/project/mcp_server/launch.py --env prod` (or `--env dev`)
 ## Persistent containers
 
 The launcher runs compose up -d --no-deps mcp under a process lock, then exec -T mcp python /app/server.py. Each client has its own stdio process. Disconnecting leaves the container running. Configuration or image changes may recreate it on the next launch; reconnect clients afterwards. Checks must use compose exec -T mcp python - instead of compose run.
+
+## Внутренняя структура MCP
+
+`server.py` и `launch.py` остаются точками входа и работают при запуске по
+абсолютному пути из любой текущей директории. Реализация находится в
+`nb4444_mcp/`:
+
+- `settings.py` загружает типизированные настройки процесса.
+- `api_client.py` содержит HTTP-клиент и JWT конкретного экземпляра,
+  однократное обновление токена и обработку ответов API.
+- `application.py` собирает FastMCP через `create_server(settings, api_client)`.
+- `tools/crud.py`, `tools/images.py`, `tools/queries.py` регистрируют инструменты;
+  `NoteImageService` проверяет и передаёт изображения.
+- `resources.py` и `prompts.py` регистрируют ресурс и prompts.
+- `launcher/` разделяет выбор окружения (`configuration.py`), файловую
+  блокировку (`locking.py`), команды Docker (`docker.py`) и запуск (`application.py`).
+
+Сервер закрывает HTTP-клиент при завершении stdio-сессии. Импорт точек входа
+не создаёт HTTP-клиент и не запускает контейнеры.
+
+Полный набор изолированных MCP-тестов из корня репозитория:
+
+```sh
+mcp_server/.venv/bin/python -m unittest discover -s mcp_server/tests -t mcp_server -p 'test_*.py' -v
+```
+
+Тесты не используют пользовательские `.env` и не обращаются к dev/prod API.
+`tests/fixtures/mcp_contract.json` фиксирует имена, описания и схемы исходного сервера:
+проверяется точное совпадение фабрики и реального stdio-процесса, включая
+ресурс и prompts. Launcher проверяется с подменой Docker и файловой блокировки.
+
+Проверка сборки образа (без запуска сервисов):
+
+```sh
+docker build -t nb4444-mcp:refactor-check mcp_server
+```
+
+Docker-контекст разрешает только Dockerfile, requirements, `server.py` и исходники
+пакета. Файлы окружения, uploads, тесты и фикстуры в образ не копируются.
+
+## Каталоги вспомогательных файлов
+
+- `tests/` — изолированные тесты; `tests/fixtures/` — эталон MCP-контракта.
+- `scripts/` — smoke-проверка контейнера и интеграционная проверка с временной БД.
+- `env/` — шаблоны и локальные файлы окружений `.env` и `.env.prod`. Локальные файлы исключены из Git и Docker-контекста.
+
+Точки входа `server.py` и `launch.py` остаются в корне. Launcher читает
+окружения из `env/`; аргументы подключения клиентов менять не требуется.

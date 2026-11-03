@@ -6,5 +6,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY server.py .
+COPY nb4444_mcp/ nb4444_mcp/
 
 CMD ["python", "server.py"]

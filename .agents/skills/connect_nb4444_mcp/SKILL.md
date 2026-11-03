@@ -11,13 +11,36 @@ Respond in Russian. Complete the available connection steps when the user asks t
 
 Determine the project root from the actual path of this `SKILL.md`, obtained when loading the skill. The file is located at `<root>/.agents/skills/connect_nb4444_mcp/SKILL.md`; in Python, calculate the root as `Path(skill_file).resolve().parents[3]` (`Path` from `pathlib`). Do not use the current working directory or a hardcoded absolute path. Check that `mcp_server/README.md` and `docker/` exist in the identified root; if the structure does not match, locate the checkout. Calculate absolute paths only for local commands and the Codex configuration; do not write them to the repository.
 
-Use the environment specified in the request. Otherwise run the checkout-local mcp_server/launch.py environment selection: choose the only env file with configured API URL and non-placeholder JWTs. If both or neither are configured, require explicit selection; never default to dev. Production may be selected automatically when it is the only configured environment. If both environments are requested, configure and verify each separately. Read the current `mcp_server/README.md`, the selected Compose file, and the environment template: they define the services and settings.
+The interpreter running `mcp_server/launch.py` must be Python **3.10+**. Check the actual interpreter used by the client, independently of the TOML-parser check below.
+
+Before selecting an environment automatically or creating an environment file from a template, check the legacy files `mcp_server/.env` (dev) and `mcp_server/.env.prod` (prod). During connection setup, copy each relevant legacy file to its corresponding path under `mcp_server/env/` only if the destination does not exist; create the directory if needed, preserve the complete contents, and set the copied file's permissions to `0600`. Keep the legacy file. If both paths exist, use the new file without overwriting it or merging values, even if only the legacy file is configured. For automatic selection, handle both environments before resolving; for an explicitly requested environment, handle that environment. In instructions-only mode, show the migration commands without executing them, and account for legacy candidates when explaining the choice.
+
+Use the environment specified in the request. Otherwise use `EnvironmentResolver` from the checkout-local package after handling legacy files. Do not run `launch.py` or call `Launcher.run()` merely to select an environment: that starts Docker preparation and a stdio session. With `PROJECT_ROOT` set to the root calculated above, this read-only command prints only the selected mode and does not invoke Docker:
+
+```sh
+python3 - "$PROJECT_ROOT" <<'PY'
+from pathlib import Path
+import sys
+
+root = Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root / "mcp_server"))
+from nb4444_mcp.launcher.configuration import EnvironmentResolver
+
+try:
+    configuration = EnvironmentResolver(root).resolve()
+except ValueError as error:
+    raise SystemExit(str(error))
+print(configuration.environment.value)
+PY
+```
+
+The resolver chooses the only env file with configured API URL and non-placeholder access and refresh JWTs. If both or neither are configured, ask for explicit selection; never default to dev. Production may be selected automatically when it is the only configured environment. Explicit selection allows preparation of a missing or incomplete env file; `resolve()` rejects it until configured. If both environments are requested, configure and verify each separately. Read the current `mcp_server/README.md`, the selected Compose file, and the environment template: they define the services and settings.
 
 | Parameter | dev | prod |
 | --- | --- | --- |
 | Compose file relative to root | `docker/docker-compose.yml` | `docker/docker-compose-prod.yml` |
-| Environment file | `mcp_server/.env` | `mcp_server/.env.prod` |
-| Template | `mcp_server/.env.example` | `mcp_server/.env.prod.example` |
+| Environment file | `mcp_server/env/.env` | `mcp_server/env/.env.prod` |
+| Template | `mcp_server/env/.env.example` | `mcp_server/env/.env.prod.example` |
 | API service | `nb4_api_dev` | `nb4_api_prod` |
 | API inside Compose | `http://nb4-api-dev:8008` | `http://nb4-api-prod:9999` |
 | JWT endpoint for local access | `http://localhost:8008/auth/jwt/create/` | `http://localhost:9999/auth/jwt/create/` |
@@ -27,7 +50,7 @@ The name `nb4444` is retained for dev connection compatibility. Production Compo
 
 Check that the Docker CLI, Docker Compose, and Docker daemon are available. If Docker Desktop is stopped, explain that it needs to be started and continue with independent configuration preparation.
 
-Create the selected environment file from the corresponding template only if the file does not exist, using umask 077. During an authorized connection setup, set its permissions to 0600 without changing its contents; in instructions-only mode, provide the command instead. Preserve existing settings and tokens. Do not print `.env` contents, passwords, or JWTs in messages or logs. Check that the file is excluded from Git.
+After checking and copying any legacy file as described above, create the selected environment file from the corresponding template only if the destination still does not exist, using umask 077. During an authorized connection setup, set its permissions to 0600 without changing its contents; in instructions-only mode, provide the command instead. Preserve existing settings and tokens. Do not print `.env` contents, passwords, or JWTs in messages or logs. Check that the file is excluded from Git.
 
 Calculate absolute `COMPOSE_FILE` and `ENV_FILE` paths from the identified root, and take `API_SERVICE` from the table. Set PROJECT_ROOT to the calculated root. For every Compose invocation, including commands below, use this prefix to prevent inherited values from overriding the selected environment file:
 
@@ -79,7 +102,7 @@ Tokens are passed from the selected environment file through Compose. MCP does n
 
 ## Verification and result
 
-Before editing config.toml, locate Python 3.11+ with tomllib or an existing interpreter with tomli. Validate the prepared TOML before writing it, keeping the backup and unrelated sections. If no parser is available, prepare the proposed edit but leave config.toml untouched and report the missing prerequisite. If the Codex CLI is installed, verify registration with `codex mcp list` without exposing secret values. Registration alone does not prove successful authentication.
+Before editing config.toml, separately check for a TOML parser: `tomllib` in Python 3.11+ or installed `tomli` (including when using Python 3.10). This does not raise the launcher requirement above Python 3.10+. Validate the prepared TOML before writing it, keeping the backup and unrelated sections. If no parser is available, prepare the proposed edit but leave config.toml untouched and report the missing prerequisite. If the Codex CLI is installed, verify registration with `codex mcp list` without exposing secret values. Registration alone does not prove successful authentication.
 
 Verify the connection using the available `get_current_user` tool on the selected server (`nb4444` or `nb4444_prod`). Do not report the connection as verified until the call succeeds.
 
@@ -90,7 +113,7 @@ Verify the new image independently through a fresh configured container. Apply t
 ```sh
 docker compose -f "$COMPOSE_FILE" --env-file "$ENV_FILE" \
   exec -T mcp python - \
-  < "$PROJECT_ROOT/mcp_server/smoke_check.py"
+  < "$PROJECT_ROOT/mcp_server/scripts/smoke_check.py"
 ```
 
 The script is supplied over stdin because it is deliberately absent from the image; it starts /app/server.py internally. This check reads application data but does not write it. Distinguish registration, fresh-container smoke success, accepted reload, and successful current-thread get_current_user. None implies the others. If refresh was accepted, check tools on the next turn; do not claim the current thread was refreshed before checking its tools and get_current_user.
