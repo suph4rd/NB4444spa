@@ -9,8 +9,8 @@ This repository contains a Django backend and a Vue frontend. Backend code lives
 
 ## Build, Test, and Development Commands
 
-- `docker-compose up --build`: starts the local Django API on port `8008` and Vue dev server on port `8080`.
-- `docker-compose -f docker-compose-test.yml up --build`: builds the backend test image and runs Django tests.
+- `docker compose up --build`: starts the local Django API on port `8008` and Vue dev server on port `8080`.
+- `docker compose -f docker-compose-test.yml up --build`: builds the backend test image and runs Django tests.
 - `cd NB4444 && python manage.py migrate`: applies backend database migrations.
 - `cd NB4444 && python manage.py runserver 0.0.0.0:8008`: runs the backend locally.
 - `cd nb4444-vue && npm install`: installs frontend dependencies.

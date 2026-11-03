@@ -1,5 +1,4 @@
-version: "3.3"
-
+name: nb4444-dev
 
 services:
   nb4_api_dev:
