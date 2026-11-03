@@ -51,7 +51,7 @@ async def check(server_path):
 
 
 def main():
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
     sys.path.insert(0, str(root / 'NB4444'))
     os.environ['DJANGO_SETTINGS_MODULE'] = 'NB4444.settings'
     from django.conf import settings

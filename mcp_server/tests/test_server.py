@@ -1,18 +1,20 @@
 import io
-import os
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
 import httpx
 from PIL import Image
-import server
+from nb4444_mcp.api_client import NB4444ApiClient
+from nb4444_mcp.application import create_server
+from nb4444_mcp.settings import ServerSettings
+from nb4444_mcp.tools import images
 
 
 class MCPTests(unittest.TestCase):
     def setUp(self):
-        self.original = server.client
         self.calls = []
         self.responses = []
 
@@ -23,17 +25,19 @@ class MCPTests(unittest.TestCase):
                 raise value
             return value
 
-        server.client = httpx.Client(transport=httpx.MockTransport(handle))
+        self.settings = ServerSettings()
+        self.api_client = NB4444ApiClient(
+            self.settings, httpx.Client(transport=httpx.MockTransport(handle)))
+        self.mcp = create_server(self.settings, self.api_client)
 
     def tearDown(self):
-        server.client.close()
-        server.client = self.original
+        self.api_client.close()
 
     def tool(self, name, **kwargs):
-        return server.mcp._tool_manager.get_tool(name).fn(**kwargs)
+        return self.mcp._tool_manager.get_tool(name).fn(**kwargs)
 
     def test_write_schema_and_unknown_fields(self):
-        tool = server.mcp._tool_manager.get_tool('create_task')
+        tool = self.mcp._tool_manager.get_tool('create_task')
         schema = tool.parameters['properties']['data']
         self.assertIn('plan', schema['properties'])
         self.assertFalse(schema['additionalProperties'])
@@ -71,7 +75,7 @@ class MCPTests(unittest.TestCase):
                 self.assertEqual(self.calls[-1].url.path, f'/api/v1/{endpoint}/7/')
 
     def test_all_tools_have_descriptions(self):
-        self.assertTrue(all(t.description for t in server.mcp._tool_manager.list_tools()))
+        self.assertTrue(all(t.description for t in self.mcp._tool_manager.list_tools()))
 
     def test_pagination(self):
         self.responses = [httpx.Response(200, json=[{'id': 3}, {'id': 4}, {'id': 5}])]
@@ -126,23 +130,24 @@ class MCPTests(unittest.TestCase):
     def test_random_unique_and_short(self):
         self.responses = [httpx.Response(200, json=[{'id': 1, 'image': 'a'},
                           {'id': 1, 'image': 'a'}, {'id': 2, 'image': 'b'}])]
-        self.assertEqual(len(server.get_random_notes_with_images()['items']), 2)
+        self.assertEqual(len(self.tool('get_random_notes_with_images')['items']), 2)
 
     def test_upload_paths(self):
-        with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, NB4444_UPLOAD_ROOT=folder):
+        with tempfile.TemporaryDirectory() as folder:
+            self.mcp = create_server(replace(self.settings, upload_root=folder), self.api_client)
             for path in (folder, folder + '/missing', '/etc/passwd'):
                 with self.assertRaisesRegex(ValueError, 'validation_error'):
-                    server.set_note_image(1, path)
+                    self.tool('set_note_image', id=1, path=path)
             bad = Path(folder) / 'bad.png'
             bad.write_bytes(b'bad')
             with self.assertRaisesRegex(ValueError, 'validation_error'):
-                server.set_note_image(1, str(bad))
+                self.tool('set_note_image', id=1, path=str(bad))
 
     def test_image_download(self):
         output = io.BytesIO()
         Image.new('RGB', (2, 2)).save(output, format='PNG')
         self.responses = [httpx.Response(200, content=output.getvalue())]
-        self.assertIsNotNone(server.get_note_image(1))
+        self.assertIsNotNone(self.tool('get_note_image', id=1))
 
     def test_stream_stops_and_closes_at_size_limit(self):
         class Stream(httpx.SyncByteStream):
@@ -159,17 +164,17 @@ class MCPTests(unittest.TestCase):
 
         stream = Stream()
         self.responses = [httpx.Response(200, stream=stream)]
-        with patch.object(server, 'MAX_IMAGE_SIZE', 65536):
+        with patch.object(images, 'MAX_IMAGE_SIZE', 65536):
             with self.assertRaisesRegex(ValueError, 'слишком большое'):
-                server.get_note_image(1)
+                self.tool('get_note_image', id=1)
         self.assertEqual(stream.chunks, 2)
         self.assertTrue(stream.closed)
 
     def test_image_size_limit(self):
         self.responses = [httpx.Response(200, content=b'x' * 20)]
-        with patch.object(server, 'MAX_IMAGE_SIZE', 10):
+        with patch.object(images, 'MAX_IMAGE_SIZE', 10):
             with self.assertRaisesRegex(ValueError, 'слишком большое'):
-                server.get_note_image(1)
+                self.tool('get_note_image', id=1)
 
 
 if __name__ == '__main__':
