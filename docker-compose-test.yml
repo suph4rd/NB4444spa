@@ -1,5 +1,4 @@
-version: "3.3"
-
+name: nb4444-test
 
 services:
   app_test:

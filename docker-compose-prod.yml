@@ -1,5 +1,4 @@
-version: "3.3"
-
+name: nb4444spa
 
 services:
   nb4_api_prod:
